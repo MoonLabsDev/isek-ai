@@ -321,21 +321,18 @@ const CharacterSheet = () => {
                             ? 'bg-emerald-500/20 border-emerald-500/50'
                             : 'bg-white/5 border-white/20'
                       }`}
+                      title={`${stat} ${getModifierDisplay(modifier)} ${getModifierDisplay(proficiencyBonus)}`}
                     >
-                      <div className="flex justify-between items-start mb-2">
+                      <div className="flex justify-between items-start">
                         <div className="flex items-center gap-2">
                           <span className="text-white font-semibold">
                             {skillNames[skill as ESkills]}
                           </span>
                         </div>
                         <div className="text-right">
-                          <div className="text-white font-bold text-lg">
+                          <span className="text-white font-bold text-lg">
                             {stat + modifier + proficiencyBonus}
-                          </div>
-                          <div className="text-gray-400 text-xs">
-                            {stat} {getModifierDisplay(modifier)}{' '}
-                            {getModifierDisplay(proficiencyBonus)}
-                          </div>
+                          </span>
                         </div>
                       </div>
                     </div>
