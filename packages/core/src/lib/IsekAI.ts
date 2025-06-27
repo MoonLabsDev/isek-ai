@@ -14,8 +14,8 @@ export class IsekAI {
   // --- create ---
 
   public constructor() {
-    this.llm_logic = new LLM_Client_OpenAI();
-    this.llm_creative = new LLM_Client_OpenAI();
+    this.llm_logic = new LLM_Client_OpenAI(true, 0);
+    this.llm_creative = new LLM_Client_OpenAI(false, 0.7);
     this.tts = new TTS_ElevenLabs('./generated/voices');
     this.db = new DB();
   }
@@ -38,7 +38,13 @@ export class IsekAI {
       `${DnD.systemPrompt}
       Generate a world description as context for a system prompt.
       The user will give you a name and a world description. Modify the description to be short and precise to give the AI a description of the world to generate.
-      The user will supply name and description.
+      The user will supply name and description. Only write the description and nothing else.
+
+      ### Output Format:
+      World:
+      - Name: <world name>
+      - Description: <world description>
+      - Level: <world level>
       `,
       `World name: ${worldName}
       Character level: ${level}
@@ -49,11 +55,58 @@ export class IsekAI {
     // generate story
     const story = await this.llm_creative.prompt(
       `${DnD.systemPrompt}
-        
-        === World:
-        ${world}`,
-      `Generate a story for the world and sketch out the story as multiple steps as a rough script. Make a list of important places and NPCs with anme and a very short description`
+      Generate a story for the world and sketch out the story as multiple steps as a rough script. Make a list of important places and NPCs with anme and a very short description
+      The user will supply a world description. Only write the story plot, NPCs and locations as list and nothing else. The Story should have at least 7 steps and has to be a complete story without open ends.
+
+      ### Output Format:
+      Story:
+      - <story step 1>
+      - <story step 2>
+      - <story step 3>
+      - ...
+
+      `,
+      `###${world}`
     );
+
+    // extract and generate locations
+    const locations = await this.llm_creative.prompt(
+      `${DnD.systemPrompt}
+      Extract the locations from the story and generate a list of locations with a name and a very short description.
+      The user will supply a story and the world description. Only write the locations as list and nothing else.
+
+      ### Output Format:
+      Locations:
+      - <location name 1>: <location description>
+      - <location name 2>: <location description>
+      - <location name 3>: <location description>
+      - ...
+
+      `,
+      `### ${world}
+
+      ### ${story}`
+    );
+
+    // extract and generate NPCs
+    const npcs = await this.llm_creative.prompt(
+      `${DnD.systemPrompt}
+      Extract the NPCs from the story and generate a list of importantNPCs with a name and a very short description.
+      The user will supply a story and the world description. Only write the NPCs as list and nothing else. Only special and important individuals should be included.
+      The description should be short and precise, cover their looks, personality, background and role in the story and how they sound.
+
+      ### Output Format:
+      NPCs:
+      - <NPC name 1>: <NPC description>
+      - <NPC name 2>: <NPC description>
+      - <NPC name 3>: <NPC description>
+      - ...
+      `,
+      `### ${world}
+
+      ### ${story}`
+    );
+    console.log(npcs);
 
     // return
     return {
@@ -61,6 +114,8 @@ export class IsekAI {
       level,
       description: world,
       story,
+      locations,
+      npcs,
     };
   }
 

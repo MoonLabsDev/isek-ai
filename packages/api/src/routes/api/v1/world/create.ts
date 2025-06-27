@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { Express, Request, Response } from 'express';
 import { global } from '../../../../globals';
 import { withLogging } from '../../../../utils/routeLogger';
@@ -20,6 +21,18 @@ const handleCreateWorld = async (req: Request, res: Response) => {
     description,
     level
   );
+
+  console.log(chalk.blue(`- World:`));
+  console.log(chalk.blue(`- Name: ${chalk.yellow(genWorld.name)}`));
+  console.log(chalk.blue(`- Level:${chalk.yellow(genWorld.level)}`));
+  console.log(
+    chalk.blue(`- Description:\n${chalk.yellow(genWorld.description)}\n\n`)
+  );
+  console.log(chalk.blue(`- Story:\n${chalk.yellow(genWorld.story)}\n\n`));
+  console.log(
+    chalk.blue(`- Locations:\n${chalk.yellow(genWorld.locations)}\n\n`)
+  );
+  console.log(chalk.blue(`- NPCs:\n${chalk.yellow(genWorld.npcs)}`));
 
   // Save world to database
   const world = await global.db.createWorld(genWorld);

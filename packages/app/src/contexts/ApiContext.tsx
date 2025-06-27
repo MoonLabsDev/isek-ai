@@ -19,6 +19,7 @@ interface ApiContextType {
     joinWorld: (characterId: string, worldId: string) => Promise<ApiResponse>;
 
     // World endpoints
+    createWorld: (worldData: any) => Promise<ApiResponse>;
     getWorlds: () => Promise<ApiResponse>;
     getWorld: (id: string) => Promise<ApiResponse>;
 
@@ -133,10 +134,18 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
   const getWorlds = useCallback(async (): Promise<ApiResponse> => {
     return fetchApi('/api/v1/world/list');
   }, [fetchApi]);
-
   const getWorld = useCallback(
     async (id: string): Promise<ApiResponse> => {
       return fetchApi(`/api/v1/world/single/${id}`);
+    },
+    [fetchApi]
+  );
+  const createWorld = useCallback(
+    async (worldData: any): Promise<ApiResponse> => {
+      return fetchApi('/api/v1/world/create', {
+        method: 'POST',
+        body: JSON.stringify(worldData),
+      });
     },
     [fetchApi]
   );
@@ -153,6 +162,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
           joinWorld,
           getWorlds,
           getWorld,
+          createWorld,
           fetch: fetchApi,
         },
       }}
