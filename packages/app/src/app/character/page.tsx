@@ -3,33 +3,19 @@
 import { useApi } from '@/contexts/ApiContext';
 import {
   backgroundIcons,
+  backgroundNames,
   classIcons,
-  isBackgroundSkill,
+  classNames,
   raceIcons,
-  skillNames,
+  raceNames,
 } from '@/utils/game';
+import { ISchema_Character } from '@moonlabs/isek-ai-core/src/types';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-interface Character {
-  id: string;
-  name: string;
-  description: string;
-  level: number;
-  experience: number;
-  race: string;
-  class: string;
-  background: string;
-  stats: Record<string, number>;
-  skills: Record<string, number>;
-  equipment: Record<string, number>;
-  createdAt: number;
-  updatedAt: number;
-}
-
 const CharactersList = () => {
   const { api } = useApi();
-  const [characters, setCharacters] = useState<Character[]>([]);
+  const [characters, setCharacters] = useState<ISchema_Character[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -124,34 +110,33 @@ const CharactersList = () => {
                 className="group block"
               >
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 h-full transform transition-all duration-300 hover:scale-105 hover:bg-white/15">
-                  <div className="flex justify-between items-start mb-4">
+                  {/* Name and Level */}
+                  <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="text-xl font-bold text-white mb-2">
+                      <h3 className="text-2xl font-bold text-white mb-2">
                         {character.name}
                       </h3>
-                      {/* Race, Class, and Background Badges */}
-                      <div className="flex flex-wrap gap-2 mb-2">
-                        <span className="px-2 py-1 bg-blue-500/20 text-blue-300 text-xs rounded-full border border-blue-500/30">
-                          {raceIcons[character.race] || '👤'} {character.race}
-                        </span>
-                        <span className="px-2 py-1 bg-purple-500/20 text-purple-300 text-xs rounded-full border border-purple-500/30">
-                          {classIcons[character.class] || '⚔️'}{' '}
-                          {character.class}
-                        </span>
-                        <span className="px-2 py-1 bg-orange-500/20 text-orange-300 text-xs rounded-full border border-orange-500/30">
-                          {backgroundIcons[character.background] || '🎭'}{' '}
-                          {character.background}
-                        </span>
-                      </div>
                     </div>
                     <div className="text-right">
                       <div className="text-2xl font-bold text-white">
                         Lv.{character.level}
                       </div>
-                      <div className="text-gray-400 text-sm">
-                        {character.experience} XP
-                      </div>
                     </div>
+                  </div>
+
+                  {/* Race, Class, and Background Badges */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    <span className="px-2 py-1 bg-blue-500/20 text-blue-300 text-xs rounded-full border border-blue-500/30">
+                      {raceIcons[character.race]} {raceNames[character.race]}
+                    </span>
+                    <span className="px-2 py-1 bg-purple-500/20 text-purple-300 text-xs rounded-full border border-purple-500/30">
+                      {classIcons[character.class]}{' '}
+                      {classNames[character.class]}
+                    </span>
+                    <span className="px-2 py-1 bg-orange-500/20 text-orange-300 text-xs rounded-full border border-orange-500/30">
+                      {backgroundIcons[character.background]}{' '}
+                      {backgroundNames[character.background]}
+                    </span>
                   </div>
 
                   {/* Stats Preview */}
@@ -167,34 +152,6 @@ const CharactersList = () => {
                         <div className="text-white font-semibold">{value}</div>
                       </div>
                     ))}
-                  </div>
-
-                  {/* Skills Preview */}
-                  <div className="flex flex-wrap gap-1">
-                    {Object.entries(character.skills)
-                      .filter(([_, level]) => level > 0)
-                      .map(([skill, level]) => (
-                        <span
-                          key={skill}
-                          className={`px-2 py-1 text-xs rounded-full ${
-                            isBackgroundSkill(skill, character.background)
-                              ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
-                              : 'bg-emerald-500/20 text-emerald-300'
-                          }`}
-                          title={`${skillNames[skill] || skill} ${
-                            isBackgroundSkill(skill, character.background)
-                              ? '(Background)'
-                              : ''
-                          }`}
-                        >
-                          {skillNames[skill] || skill}
-                        </span>
-                      ))}
-                  </div>
-
-                  <div className="mt-4 text-gray-400 text-xs">
-                    Created:{' '}
-                    {new Date(character.createdAt).toLocaleDateString()}
                   </div>
                 </div>
               </Link>
