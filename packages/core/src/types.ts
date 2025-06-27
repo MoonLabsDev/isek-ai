@@ -1,3 +1,33 @@
+export interface IStats {
+  strength: number;
+  dexterity: number;
+  constitution: number;
+  intelligence: number;
+  wisdom: number;
+  charisma: number;
+}
+
+export interface ISkills {
+  acrobatics: number;
+  animalHandling: number;
+  arcana: number;
+  athletics: number;
+  deception: number;
+  history: number;
+  insight: number;
+  intimidation: number;
+  investigation: number;
+  medicine: number;
+  nature: number;
+  perception: number;
+  performance: number;
+  persuasion: number;
+  religion: number;
+  sleightOfHand: number;
+  stealth: number;
+  survival: number;
+}
+
 export interface ISchema_World {
   id: string;
   name: string;
@@ -19,8 +49,8 @@ export interface ISchema_Character {
   level: number;
   experience: number;
 
-  stats: Record<string, number>;
-  skills: Record<string, number>;
+  stats: IStats;
+  skills: ISkills;
   equipment: Record<string, number>;
   createdAt: number;
   updatedAt: number;

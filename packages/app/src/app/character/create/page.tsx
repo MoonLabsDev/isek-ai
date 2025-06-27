@@ -2,6 +2,15 @@
 
 import { useApi } from '@/contexts/ApiContext';
 import {
+  backgroundIcons,
+  backgroundNames,
+  classIcons,
+  classNames,
+  raceIcons,
+  raceNames,
+  skillNames,
+} from '@/utils/game';
+import {
   DnD,
   EBackground,
   EClass,
@@ -10,90 +19,6 @@ import {
 } from '@moonlabs/isek-ai-core/src/lib/games/DnD';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-
-const skillNames: Record<string, string> = {
-  ACR: 'Acrobatics',
-  ANI: 'Animal Handling',
-  ARC: 'Arcana',
-  ATH: 'Athletics',
-  DEC: 'Deception',
-  HIS: 'History',
-  INS: 'Insight',
-  INT: 'Intimidation',
-  INV: 'Investigation',
-  MED: 'Medicine',
-  NAT: 'Nature',
-  PER: 'Perception',
-  PERF: 'Performance',
-  PERS: 'Persuasion',
-  REL: 'Religion',
-  SLE: 'Sleight of Hand',
-  STE: 'Stealth',
-  SUR: 'Survival',
-};
-
-// Skill to ability score mapping
-const skillToAbility: Record<string, string> = {
-  ACR: 'dexterity',
-  ANI: 'wisdom',
-  ARC: 'intelligence',
-  ATH: 'strength',
-  DEC: 'charisma',
-  HIS: 'intelligence',
-  INS: 'wisdom',
-  INT: 'charisma',
-  INV: 'intelligence',
-  MED: 'wisdom',
-  NAT: 'intelligence',
-  PER: 'wisdom',
-  PERF: 'charisma',
-  PERS: 'charisma',
-  REL: 'intelligence',
-  SLE: 'dexterity',
-  STE: 'dexterity',
-  SUR: 'wisdom',
-};
-
-// Icons for races, classes, and backgrounds
-const raceIcons: Record<string, string> = {
-  DRAGONBORN: '🐉',
-  DWARF: '⛏️',
-  ELF: '🏹',
-  GNOME: '🔧',
-  HALFELF: '🧝',
-  HALFORC: '🪓',
-  HUMAN: '👤',
-  TIEFLING: '😈',
-};
-
-const classIcons: Record<string, string> = {
-  BARBARIAN: '⚔️',
-  BARD: '🎵',
-  CLERIC: '⛪',
-  DRUID: '🌿',
-  FIGHTER: '🛡️',
-  MONK: '🥋',
-  PALADIN: '⚜️',
-  RANGER: '🏹',
-  ROGUE: '🗡️',
-  SORCERER: '✨',
-  WARLOCK: '👹',
-  WIZARD: '📚',
-};
-
-const backgroundIcons: Record<string, string> = {
-  ACOLYTE: '🙏',
-  CHARLATAN: '🎭',
-  CRIMINAL: '🦹',
-  ENTERTAINER: '🎪',
-  FOLKHERO: '🏆',
-  GUILDARTISAN: '⚒️',
-  HERMIT: '🏔️',
-  NOBLE: '👑',
-  OUTLANDER: '🗺️',
-  SAGE: '📖',
-  SAILOR: '⚓',
-};
 
 interface CharacterForm {
   name: string;
@@ -330,7 +255,7 @@ const CreateCharacter = () => {
                   >
                     {Object.values(ERace).map(race => (
                       <option key={race} value={race} className="bg-slate-800">
-                        {raceIcons[race]} {race}
+                        {raceIcons[race]} {raceNames[race]}
                       </option>
                     ))}
                   </select>
@@ -357,7 +282,7 @@ const CreateCharacter = () => {
                         value={classType}
                         className="bg-slate-800"
                       >
-                        {classIcons[classType]} {classType}
+                        {classIcons[classType]} {classNames[classType]}
                       </option>
                     ))}
                   </select>
@@ -383,7 +308,8 @@ const CreateCharacter = () => {
                         value={background}
                         className="bg-slate-800"
                       >
-                        {backgroundIcons[background]} {background}
+                        {backgroundIcons[background]}{' '}
+                        {backgroundNames[background]}
                       </option>
                     ))}
                   </select>
@@ -508,7 +434,7 @@ const CreateCharacter = () => {
                   const isSelected = form.selectedSkills.includes(skill);
                   const isAvailable = allAvailableSkills.includes(skill);
                   const isBackgroundSkill = backgroundSkills.includes(skill);
-                  const abilityScore = skillToAbility[skill];
+                  const abilityScore = DnD.skillStats[skill];
                   const abilityValue = form.stats[abilityScore];
                   const modifier = Math.floor((abilityValue - 10) / 2);
                   const modifierText =
@@ -524,7 +450,7 @@ const CreateCharacter = () => {
                             ? 'bg-blue-500/10 border-blue-500/30'
                             : isAvailable
                               ? 'bg-white/5 border-white/20 hover:bg-white/10'
-                              : 'bg-gray-500/10 border-gray-500/30 opacity-50 cursor-not-allowed'
+                              : 'bg-gray-500/10 border-gray-500/30 opacity-50 cursor-not-allowed invisible hidden'
                       }`}
                       onClick={() => isAvailable && toggleSkill(skill)}
                     >
@@ -540,12 +466,12 @@ const CreateCharacter = () => {
                           </span>
                           {isBackgroundSkill && (
                             <span className="px-2 py-1 bg-blue-500 text-white text-xs rounded-full">
-                              Background
+                              Background +2
                             </span>
                           )}
                           {isSelected && (
                             <span className="px-2 py-1 bg-emerald-500 text-white text-xs rounded-full">
-                              Selected
+                              Proficient +2
                             </span>
                           )}
                         </div>

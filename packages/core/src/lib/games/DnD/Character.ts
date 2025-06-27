@@ -1,4 +1,4 @@
-import { ISchema_Character } from '../../../types';
+import { ISchema_Character, IStats } from '../../../types';
 import { DnD } from './DnD';
 import { EBackground, EClass, ERace, ESkills } from './types';
 
@@ -27,7 +27,7 @@ export class DnD_Character {
   private readonly class: EClass;
   private readonly background: EBackground;
 
-  private readonly stats: Record<string, number>;
+  private readonly stats: IStats;
   private readonly skills: ESkills[];
   private readonly equipment: Record<string, number>;
   private readonly inventory: Record<string, number>;
@@ -107,7 +107,8 @@ export class DnD_Character {
   }
 
   public getSkillModifier(skill: ESkills) {
-    const modifier = Math.floor((this.stats[skill] - 10) / 2);
+    const stat = DnD.skillStats[skill];
+    const modifier = Math.floor((this.stats[stat] - 10) / 2);
     return modifier;
   }
 
@@ -115,5 +116,9 @@ export class DnD_Character {
     const levelMultiplier = DnD.proficiencyLevelBonus[this.level - 1];
     const proficiencyBonus = this.skills.includes(skill) ? levelMultiplier : 0;
     return proficiencyBonus;
+  }
+
+  public static isBackgroundSkill(skill: ESkills, background: EBackground) {
+    return DnD.backgroundSkills[background].includes(skill);
   }
 }

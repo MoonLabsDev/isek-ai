@@ -61,6 +61,9 @@ const handleGetCharacterSheet = async (req: Request, res: Response) => {
     character: {
       id: character.id,
       name: character.name,
+      race: character.race,
+      class: character.class,
+      background: character.background,
       description: character.description,
       level: character.level || 1,
       experience: character.experience || 0,

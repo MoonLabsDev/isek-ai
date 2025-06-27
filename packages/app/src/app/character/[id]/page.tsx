@@ -1,8 +1,14 @@
 'use client';
 
 import { useApi } from '@/contexts/ApiContext';
+import {
+  backgroundIcons,
+  classIcons,
+  isBackgroundSkill,
+  raceIcons,
+} from '@/utils/game';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 interface Skill {
@@ -15,12 +21,26 @@ interface Skill {
   isProficient: boolean;
 }
 
+interface World {
+  id: string;
+  name: string;
+  description: string;
+  story: string;
+  level: number;
+  createdAt: number;
+  updatedAt: number;
+}
+
 interface Character {
   id: string;
   name: string;
   description: string;
   level: number;
   experience: number;
+  worldId?: string;
+  race: string;
+  class: string;
+  background: string;
   stats: Record<string, number>;
   skills: Skill[];
   equipment: Record<string, number>;
@@ -30,10 +50,15 @@ interface Character {
 
 const CharacterSheet = () => {
   const params = useParams();
+  const router = useRouter();
   const { api } = useApi();
   const [character, setCharacter] = useState<Character | null>(null);
+  const [worlds, setWorlds] = useState<World[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showWorldDialog, setShowWorldDialog] = useState(false);
+  const [selectedWorldId, setSelectedWorldId] = useState<string>('');
+  const [joiningWorld, setJoiningWorld] = useState(false);
 
   useEffect(() => {
     const fetchCharacter = async () => {
@@ -55,7 +80,56 @@ const CharacterSheet = () => {
     if (params.id) {
       fetchCharacter();
     }
-  }, [params.i]);
+  }, [params.id]);
+
+  const fetchWorlds = async () => {
+    try {
+      const response = await api.getWorlds();
+      if (response.success && response.data) {
+        setWorlds(response.data.worlds);
+      }
+    } catch (err) {
+      console.error('Failed to fetch worlds:', err);
+    }
+  };
+
+  const handleEnterWorld = () => {
+    if (character?.worldId) {
+      // Character already has a world, go directly to game
+      router.push(`/game?char=${character.id}`);
+    } else {
+      // Character needs to select a world
+      fetchWorlds();
+      setShowWorldDialog(true);
+    }
+  };
+
+  const handleJoinWorld = async () => {
+    if (!selectedWorldId || !character) return;
+
+    setJoiningWorld(true);
+    try {
+      const response = await api.joinWorld(character.id, selectedWorldId);
+
+      if (response.success) {
+        // Update character with new worldId
+        setCharacter(prev =>
+          prev ? { ...prev, worldId: selectedWorldId } : null
+        );
+        setShowWorldDialog(false);
+        setSelectedWorldId('');
+
+        // Navigate to game
+        router.push(`/game?char=${character.id}`);
+      } else {
+        setError(response.error || 'Failed to join world');
+      }
+    } catch (err) {
+      setError('Failed to join world');
+    } finally {
+      setJoiningWorld(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -101,16 +175,113 @@ const CharacterSheet = () => {
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
                 {character.name}
               </h1>
-              <p className="text-gray-300 text-lg">{character.description}</p>
+              <p className="text-gray-300 text-lg mb-4">
+                {character.description}
+              </p>
+              {/* Race, Class, and Background Badges */}
+              <div className="flex flex-wrap gap-2">
+                <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full border border-blue-500/30">
+                  {raceIcons[character.race] || '👤'} {character.race}
+                </span>
+                <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full border border-purple-500/30">
+                  {classIcons[character.class] || '⚔️'} {character.class}
+                </span>
+                <span className="px-3 py-1 bg-orange-500/20 text-orange-300 text-sm rounded-full border border-orange-500/30">
+                  {backgroundIcons[character.background] || '🎭'}{' '}
+                  {character.background}
+                </span>
+              </div>
             </div>
             <div className="flex flex-col items-end gap-2">
               <div className="text-2xl font-bold text-white">
                 Level {character.level}
               </div>
               <div className="text-gray-300">{character.experience} XP</div>
+              <button
+                onClick={handleEnterWorld}
+                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold rounded-full hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 shadow-lg"
+              >
+                <svg
+                  className="mr-2 w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+                Enter World
+              </button>
             </div>
           </div>
         </div>
+
+        {/* World Selection Dialog */}
+        {showWorldDialog && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 max-w-2xl w-full mx-4">
+              <h2 className="text-2xl font-bold text-white mb-6">
+                Select a World
+              </h2>
+              <p className="text-gray-300 mb-6">
+                Choose a world for {character.name} to enter:
+              </p>
+
+              <div className="space-y-4 mb-6 max-h-96 overflow-y-auto">
+                {worlds.map(world => (
+                  <div
+                    key={world.id}
+                    className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
+                      selectedWorldId === world.id
+                        ? 'bg-purple-500/20 border-purple-500/50'
+                        : 'bg-white/5 border-white/20 hover:bg-white/10'
+                    }`}
+                    onClick={() => setSelectedWorldId(world.id)}
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3 className="text-white font-semibold mb-2">
+                          {world.name}
+                        </h3>
+                        <p className="text-gray-300 text-sm line-clamp-2">
+                          {world.description}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-white font-bold">
+                          Level {world.level}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex gap-4 justify-end">
+                <button
+                  onClick={() => {
+                    setShowWorldDialog(false);
+                    setSelectedWorldId('');
+                  }}
+                  className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleJoinWorld}
+                  disabled={!selectedWorldId || joiningWorld}
+                  className="px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg hover:from-purple-600 hover:to-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {joiningWorld ? 'Joining...' : 'Join World'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Stats Section */}
@@ -153,40 +324,53 @@ const CharacterSheet = () => {
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
               <h2 className="text-2xl font-bold text-white mb-6">Skills</h2>
               <div className="grid md:grid-cols-2 gap-4">
-                {character.skills.map(skill => (
-                  <div
-                    key={skill.name}
-                    className={`p-4 rounded-lg border-2 transition-all duration-200 ${
-                      skill.isProficient
-                        ? 'bg-emerald-500/20 border-emerald-500/50'
-                        : 'bg-white/5 border-white/20'
-                    }`}
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-white font-semibold">
-                          {skill.fullName}
-                        </span>
-                        {skill.isProficient && (
-                          <span className="px-2 py-1 bg-emerald-500 text-white text-xs rounded-full font-bold">
-                            PROF
+                {character.skills.map(skill => {
+                  const isBackground = isBackgroundSkill(
+                    skill.name,
+                    character.background
+                  );
+                  return (
+                    <div
+                      key={skill.name}
+                      className={`p-4 rounded-lg border-2 transition-all duration-200 ${
+                        isBackground
+                          ? 'bg-blue-500/20 border-blue-500/50'
+                          : skill.isProficient
+                            ? 'bg-emerald-500/20 border-emerald-500/50'
+                            : 'bg-white/5 border-white/20'
+                      }`}
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-white font-semibold">
+                            {skill.fullName}
                           </span>
-                        )}
-                      </div>
-                      <div className="text-right">
-                        <div className="text-white font-bold text-lg">
-                          {getModifierDisplay(skill.total)}
+                          {isBackground && (
+                            <span className="px-2 py-1 bg-blue-500 text-white text-xs rounded-full font-bold">
+                              BG
+                            </span>
+                          )}
+                          {skill.isProficient && !isBackground && (
+                            <span className="px-2 py-1 bg-emerald-500 text-white text-xs rounded-full font-bold">
+                              PROF
+                            </span>
+                          )}
                         </div>
-                        <div className="text-gray-400 text-xs">
-                          {skill.statValue} +{' '}
-                          {getModifierDisplay(skill.modifier)}
-                          {skill.proficiencyBonus > 0 &&
-                            ` + ${skill.proficiencyBonus}`}
+                        <div className="text-right">
+                          <div className="text-white font-bold text-lg">
+                            {getModifierDisplay(skill.total)}
+                          </div>
+                          <div className="text-gray-400 text-xs">
+                            {skill.statValue} +{' '}
+                            {getModifierDisplay(skill.modifier)}
+                            {skill.proficiencyBonus > 0 &&
+                              ` + ${skill.proficiencyBonus}`}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>

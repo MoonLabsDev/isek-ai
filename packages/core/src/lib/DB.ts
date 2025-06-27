@@ -168,6 +168,25 @@ export class DB {
     return characters;
   }
 
+  public async updateCharacterWorld(characterId: string, worldId: string) {
+    // update character's worldId
+    const result = await this.collections.characters?.updateOne(
+      { id: characterId },
+      {
+        $set: {
+          worldId,
+          updatedAt: Date.now(),
+        },
+      }
+    );
+
+    if (!result || result.matchedCount === 0) {
+      throw new Error('Character not found');
+    }
+
+    return result;
+  }
+
   public async getAllCharacters() {
     // get all characters
     const characters = await this.collections.characters?.find().toArray();

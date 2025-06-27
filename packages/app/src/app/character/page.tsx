@@ -1,6 +1,13 @@
 'use client';
 
 import { useApi } from '@/contexts/ApiContext';
+import {
+  backgroundIcons,
+  classIcons,
+  isBackgroundSkill,
+  raceIcons,
+  skillNames,
+} from '@/utils/game';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -19,55 +26,6 @@ interface Character {
   createdAt: number;
   updatedAt: number;
 }
-
-// Skill name mapping
-const skillNames: Record<string, string> = {
-  ACR: 'Acrobatics',
-  ANI: 'Animal Handling',
-  ARC: 'Arcana',
-  ATH: 'Athletics',
-  DEC: 'Deception',
-  HIS: 'History',
-  INS: 'Insight',
-  INT: 'Intimidation',
-  INV: 'Investigation',
-  MED: 'Medicine',
-  NAT: 'Nature',
-  PER: 'Perception',
-  PERF: 'Performance',
-  PERS: 'Persuasion',
-  REL: 'Religion',
-  SLE: 'Sleight of Hand',
-  STE: 'Stealth',
-  SUR: 'Survival',
-};
-
-// Icons for races and classes
-const raceIcons: Record<string, string> = {
-  DRAGONBORN: '🐉',
-  DWARF: '⛏️',
-  ELF: '🏹',
-  GNOME: '🔧',
-  HALFELF: '🧝',
-  HALFORC: '🪓',
-  HUMAN: '👤',
-  TIEFLING: '😈',
-};
-
-const classIcons: Record<string, string> = {
-  BARBARIAN: '⚔️',
-  BARD: '🎵',
-  CLERIC: '⛪',
-  DRUID: '🌿',
-  FIGHTER: '🛡️',
-  MONK: '🥋',
-  PALADIN: '⚜️',
-  RANGER: '🏹',
-  ROGUE: '🗡️',
-  SORCERER: '✨',
-  WARLOCK: '👹',
-  WIZARD: '📚',
-};
 
 const CharactersList = () => {
   const { api } = useApi();
@@ -171,7 +129,7 @@ const CharactersList = () => {
                       <h3 className="text-xl font-bold text-white mb-2">
                         {character.name}
                       </h3>
-                      {/* Race and Class Badges */}
+                      {/* Race, Class, and Background Badges */}
                       <div className="flex flex-wrap gap-2 mb-2">
                         <span className="px-2 py-1 bg-blue-500/20 text-blue-300 text-xs rounded-full border border-blue-500/30">
                           {raceIcons[character.race] || '👤'} {character.race}
@@ -179,6 +137,10 @@ const CharactersList = () => {
                         <span className="px-2 py-1 bg-purple-500/20 text-purple-300 text-xs rounded-full border border-purple-500/30">
                           {classIcons[character.class] || '⚔️'}{' '}
                           {character.class}
+                        </span>
+                        <span className="px-2 py-1 bg-orange-500/20 text-orange-300 text-xs rounded-full border border-orange-500/30">
+                          {backgroundIcons[character.background] || '🎭'}{' '}
+                          {character.background}
                         </span>
                       </div>
                     </div>
@@ -214,8 +176,16 @@ const CharactersList = () => {
                       .map(([skill, level]) => (
                         <span
                           key={skill}
-                          className="px-2 py-1 bg-emerald-500/20 text-emerald-300 text-xs rounded-full"
-                          title={skillNames[skill] || skill}
+                          className={`px-2 py-1 text-xs rounded-full ${
+                            isBackgroundSkill(skill, character.background)
+                              ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                              : 'bg-emerald-500/20 text-emerald-300'
+                          }`}
+                          title={`${skillNames[skill] || skill} ${
+                            isBackgroundSkill(skill, character.background)
+                              ? '(Background)'
+                              : ''
+                          }`}
                         >
                           {skillNames[skill] || skill}
                         </span>

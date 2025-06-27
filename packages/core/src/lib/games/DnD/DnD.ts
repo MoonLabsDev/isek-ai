@@ -1,4 +1,4 @@
-import { EBackground, EClass, ESkills } from './types';
+import { EBackground, EClass, ESkills, EStats } from './types';
 
 export class DnD {
   // --- system ---
@@ -16,29 +16,29 @@ export class DnD {
 
   // --- skills ---
 
-  public static readonly skills = {
-    strength: [ESkills.Athletics],
-    dexterity: [ESkills.Acrobatics, ESkills.SleightOfHand, ESkills.Stealth],
-    intelligence: [
-      ESkills.Arcana,
-      ESkills.History,
-      ESkills.Investigation,
-      ESkills.Nature,
-      ESkills.Religion,
-    ],
-    wisdom: [
-      ESkills.AnimalHandling,
-      ESkills.Insight,
-      ESkills.Medicine,
-      ESkills.Perception,
-      ESkills.Survival,
-    ],
-    charisma: [
-      ESkills.Deception,
-      ESkills.Intimidation,
-      ESkills.Performance,
-      ESkills.Persuasion,
-    ],
+  public static readonly skillStats = {
+    [ESkills.Athletics]: EStats.Strength,
+
+    [ESkills.Acrobatics]: EStats.Dexterity,
+    [ESkills.SleightOfHand]: EStats.Dexterity,
+    [ESkills.Stealth]: EStats.Dexterity,
+
+    [ESkills.AnimalHandling]: EStats.Wisdom,
+    [ESkills.Insight]: EStats.Wisdom,
+    [ESkills.Medicine]: EStats.Wisdom,
+    [ESkills.Perception]: EStats.Wisdom,
+    [ESkills.Survival]: EStats.Wisdom,
+
+    [ESkills.Arcana]: EStats.Intelligence,
+    [ESkills.History]: EStats.Intelligence,
+    [ESkills.Investigation]: EStats.Intelligence,
+    [ESkills.Nature]: EStats.Intelligence,
+    [ESkills.Religion]: EStats.Intelligence,
+
+    [ESkills.Intimidation]: EStats.Charisma,
+    [ESkills.Performance]: EStats.Charisma,
+    [ESkills.Persuasion]: EStats.Charisma,
+    [ESkills.Deception]: EStats.Charisma,
   };
 
   public static readonly skillPoints = {
@@ -188,14 +188,6 @@ export class DnD {
 
   public static readonly baseStat = 8;
   public static readonly inititialStatPoints = 27;
-  public static readonly stats = {
-    strength: 'STR',
-    dexterity: 'DEX',
-    constitution: 'CON',
-    intelligence: 'INT',
-    wisdom: 'WIS',
-    charisma: 'CHA',
-  };
 
   // --- functions ---
 
