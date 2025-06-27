@@ -1,23 +1,6 @@
-import { ISchema_Character, IStats } from '../../../types';
+import { IStats } from '../../../types';
 import { DnD } from './DnD';
 import { EBackground, EClass, ERace, ESkills } from './types';
-
-const chars: Record<string, DnD_Character> = {};
-
-export function getCharacter(id: string, info: ISchema_Character) {
-  const char = chars[id];
-  if (char) return char;
-  const newChar = new DnD_Character(
-    id,
-    info.name,
-    ERace.Human,
-    EClass.Rogue,
-    EBackground.Criminal,
-    []
-  );
-  chars[id] = newChar;
-  return newChar;
-}
 
 export class DnD_Character {
   private readonly id: string;
@@ -52,6 +35,7 @@ export class DnD_Character {
     race: ERace,
     classType: EClass,
     background: EBackground,
+    stats: IStats,
     proficiency: ESkills[]
   ) {
     // base
@@ -72,14 +56,7 @@ export class DnD_Character {
     }
 
     // stats
-    this.stats = {
-      strength: DnD.baseStat,
-      dexterity: DnD.baseStat,
-      constitution: DnD.baseStat,
-      intelligence: DnD.baseStat,
-      wisdom: DnD.baseStat,
-      charisma: DnD.baseStat,
-    };
+    this.stats = stats;
 
     // proficiency
     this.skills = proficiency;

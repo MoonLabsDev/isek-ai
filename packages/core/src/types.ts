@@ -1,3 +1,5 @@
+import { EBackground, EClass, ERace } from './lib/games';
+
 export interface IStats {
   strength: number;
   dexterity: number;
@@ -42,9 +44,9 @@ export interface ISchema_Character {
   id: string;
   name: string;
   description: string;
-  race: string;
-  class: string;
-  background: string;
+  race: ERace;
+  class: EClass;
+  background: EBackground;
   worldId: string;
   level: number;
   experience: number;

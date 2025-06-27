@@ -3,57 +3,30 @@
 import { useApi } from '@/contexts/ApiContext';
 import {
   backgroundIcons,
+  backgroundNames,
   classIcons,
+  classNames,
   isBackgroundSkill,
   raceIcons,
+  raceNames,
+  skillNames,
 } from '@/utils/game';
+import { DnD, ESkills } from '@moonlabs/isek-ai-core/src/lib/games/DnD';
+import {
+  ISchema_Character,
+  ISchema_World,
+} from '@moonlabs/isek-ai-core/src/types';
+
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
-interface Skill {
-  name: string;
-  fullName: string;
-  statValue: number;
-  modifier: number;
-  proficiencyBonus: number;
-  total: number;
-  isProficient: boolean;
-}
-
-interface World {
-  id: string;
-  name: string;
-  description: string;
-  story: string;
-  level: number;
-  createdAt: number;
-  updatedAt: number;
-}
-
-interface Character {
-  id: string;
-  name: string;
-  description: string;
-  level: number;
-  experience: number;
-  worldId?: string;
-  race: string;
-  class: string;
-  background: string;
-  stats: Record<string, number>;
-  skills: Skill[];
-  equipment: Record<string, number>;
-  createdAt: number;
-  updatedAt: number;
-}
 
 const CharacterSheet = () => {
   const params = useParams();
   const router = useRouter();
   const { api } = useApi();
-  const [character, setCharacter] = useState<Character | null>(null);
-  const [worlds, setWorlds] = useState<World[]>([]);
+  const [character, setCharacter] = useState<ISchema_Character | null>(null);
+  const [worlds, setWorlds] = useState<ISchema_World[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showWorldDialog, setShowWorldDialog] = useState(false);
@@ -181,14 +154,16 @@ const CharacterSheet = () => {
               {/* Race, Class, and Background Badges */}
               <div className="flex flex-wrap gap-2">
                 <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full border border-blue-500/30">
-                  {raceIcons[character.race] || '👤'} {character.race}
+                  {raceIcons[character.race] || '👤'}{' '}
+                  {raceNames[character.race]}
                 </span>
                 <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full border border-purple-500/30">
-                  {classIcons[character.class] || '⚔️'} {character.class}
+                  {classIcons[character.class] || '⚔️'}{' '}
+                  {classNames[character.class]}
                 </span>
                 <span className="px-3 py-1 bg-orange-500/20 text-orange-300 text-sm rounded-full border border-orange-500/30">
                   {backgroundIcons[character.background] || '🎭'}{' '}
-                  {character.background}
+                  {backgroundNames[character.background]}
                 </span>
               </div>
             </div>
@@ -287,9 +262,7 @@ const CharacterSheet = () => {
           {/* Stats Section */}
           <div className="lg:col-span-1">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-              <h2 className="text-2xl font-bold text-white mb-6">
-                Ability Scores
-              </h2>
+              <h2 className="text-2xl font-bold text-white mb-6">Stats</h2>
               <div className="space-y-4">
                 {Object.entries(character.stats).map(([stat, value]) => {
                   const modifier = getStatModifier(value);
@@ -324,18 +297,27 @@ const CharacterSheet = () => {
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
               <h2 className="text-2xl font-bold text-white mb-6">Skills</h2>
               <div className="grid md:grid-cols-2 gap-4">
-                {character.skills.map(skill => {
+                {Object.keys(character.skills).map(skill => {
                   const isBackground = isBackgroundSkill(
-                    skill.name,
+                    skill as ESkills,
                     character.background
                   );
+                  const isProficient = character.skills[skill as ESkills] === 1;
+                  const stat =
+                    character.stats[DnD.skillStats[skill as ESkills]];
+                  const modifier = getStatModifier(stat);
+                  const proficiencyBonus =
+                    isBackground || isProficient
+                      ? DnD.proficiencyLevelBonus[character.level - 1]
+                      : 0;
+
                   return (
                     <div
-                      key={skill.name}
+                      key={skill}
                       className={`p-4 rounded-lg border-2 transition-all duration-200 ${
                         isBackground
                           ? 'bg-blue-500/20 border-blue-500/50'
-                          : skill.isProficient
+                          : isProficient
                             ? 'bg-emerald-500/20 border-emerald-500/50'
                             : 'bg-white/5 border-white/20'
                       }`}
@@ -343,28 +325,16 @@ const CharacterSheet = () => {
                       <div className="flex justify-between items-start mb-2">
                         <div className="flex items-center gap-2">
                           <span className="text-white font-semibold">
-                            {skill.fullName}
+                            {skillNames[skill as ESkills]}
                           </span>
-                          {isBackground && (
-                            <span className="px-2 py-1 bg-blue-500 text-white text-xs rounded-full font-bold">
-                              BG
-                            </span>
-                          )}
-                          {skill.isProficient && !isBackground && (
-                            <span className="px-2 py-1 bg-emerald-500 text-white text-xs rounded-full font-bold">
-                              PROF
-                            </span>
-                          )}
                         </div>
                         <div className="text-right">
                           <div className="text-white font-bold text-lg">
-                            {getModifierDisplay(skill.total)}
+                            {stat + modifier + proficiencyBonus}
                           </div>
                           <div className="text-gray-400 text-xs">
-                            {skill.statValue} +{' '}
-                            {getModifierDisplay(skill.modifier)}
-                            {skill.proficiencyBonus > 0 &&
-                              ` + ${skill.proficiencyBonus}`}
+                            {stat} {getModifierDisplay(modifier)}{' '}
+                            {getModifierDisplay(proficiencyBonus)}
                           </div>
                         </div>
                       </div>
@@ -394,19 +364,6 @@ const CharacterSheet = () => {
             </div>
           </div>
         )}
-
-        {/* Footer */}
-        <div className="mt-8 text-center text-gray-400 text-sm">
-          Character created:{' '}
-          {new Date(character.createdAt).toLocaleDateString()}
-          {character.updatedAt !== character.createdAt && (
-            <span>
-              {' '}
-              • Last updated:{' '}
-              {new Date(character.updatedAt).toLocaleDateString()}
-            </span>
-          )}
-        </div>
       </div>
     </div>
   );

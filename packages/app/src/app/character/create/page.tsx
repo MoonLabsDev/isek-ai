@@ -484,7 +484,7 @@ const CreateCharacter = () => {
       const response = await api.createCharacter(characterData);
 
       if (response.success && response.data) {
-        //router.push(`/character/${response.data.character.id}`);
+        router.push(`/character/${response.data.character.id}`);
       } else {
         alert(
           'Failed to create character: ' + (response.error || 'Unknown error')

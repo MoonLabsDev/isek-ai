@@ -1,3 +1,4 @@
+import { ESkills, EStats } from '@moonlabs/isek-ai-core/src/lib/games/DnD';
 import { Express, Request, Response } from 'express';
 import { global } from '../../../../globals';
 import { withLogging } from '../../../../utils/routeLogger';
@@ -31,19 +32,19 @@ const handleCreateCharacter = async (req: Request, res: Response) => {
   }
 
   // Validate stats structure
-  const requiredStats = [
-    'strength',
-    'dexterity',
-    'constitution',
-    'intelligence',
-    'wisdom',
-    'charisma',
-  ];
-  for (const stat of requiredStats) {
+  for (const stat of Object.values(EStats)) {
     if (typeof stats[stat] !== 'number') {
       return res.status(400).json({
         success: false,
         error: `Invalid stats: ${stat} must be a number`,
+      });
+    }
+  }
+  for (const skill of Object.values(ESkills)) {
+    if (skills[skill] !== 1 && skills[skill] !== 0) {
+      return res.status(400).json({
+        success: false,
+        error: `Invalid skills: ${skill} must be 0 or 1`,
       });
     }
   }
@@ -66,7 +67,7 @@ const handleCreateCharacter = async (req: Request, res: Response) => {
   // Answer
   res.status(201).json({
     success: true,
-    character: char.id,
+    character: char,
   });
 };
 
