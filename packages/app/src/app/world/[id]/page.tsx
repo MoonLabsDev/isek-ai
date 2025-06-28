@@ -4,6 +4,7 @@ import { useApi } from '@/contexts/ApiContext';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 interface World {
   id: string;
@@ -90,29 +91,6 @@ const WorldDetail = () => {
   return (
     <div className="p-4">
       <div className="max-w-4xl mx-auto">
-        {/* Navigation */}
-        <div className="mb-6">
-          <Link
-            href="/world"
-            className="inline-flex items-center text-gray-300 hover:text-white transition-colors"
-          >
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Back to Worlds
-          </Link>
-        </div>
-
         {/* World Header */}
         <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 mb-8">
           <div className="flex justify-between items-start mb-6">
@@ -120,7 +98,9 @@ const WorldDetail = () => {
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
                 {world.name}
               </h1>
-              <p className="text-xl text-gray-300 mb-4">{world.description}</p>
+              <p className="text-xl text-gray-300 mb-4">
+                <ReactMarkdown>{world.description}</ReactMarkdown>
+              </p>
             </div>
             <div className="text-right">
               <div className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white px-6 py-3 rounded-full text-2xl font-bold">
@@ -128,31 +108,13 @@ const WorldDetail = () => {
               </div>
             </div>
           </div>
-
-          {/* World Stats */}
-          <div className="grid md:grid-cols-2 gap-6 text-sm text-gray-400">
-            <div>
-              <span className="font-semibold">Created:</span>{' '}
-              {new Date(world.createdAt).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </div>
-            <div>
-              <span className="font-semibold">Last Updated:</span>{' '}
-              {new Date(world.updatedAt).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </div>
-          </div>
         </div>
 
         {/* World Story */}
         <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 mb-8">
-          <h2 className="text-2xl font-bold text-white mb-6">World Story</h2>
+          <h2 className="text-2xl font-bold text-white mb-6">
+            <ReactMarkdown>World Story</ReactMarkdown>
+          </h2>
           <div className="prose prose-invert max-w-none">
             <p className="text-gray-300 leading-relaxed text-lg whitespace-pre-wrap">
               {world.story}
