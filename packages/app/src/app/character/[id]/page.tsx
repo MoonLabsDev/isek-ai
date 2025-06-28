@@ -1,15 +1,12 @@
 'use client';
 
 import { useApi } from '@/contexts/ApiContext';
+import { Translation } from '@/labels/Translation';
 import {
   backgroundIcons,
-  backgroundNames,
   classIcons,
-  classNames,
   isBackgroundSkill,
   raceIcons,
-  raceNames,
-  skillNames,
 } from '@/utils/game';
 import { DnD, ESkills } from '@moonlabs/isek-ai-core/src/lib/games/DnD';
 import {
@@ -155,15 +152,17 @@ const CharacterSheet = () => {
               <div className="flex flex-wrap gap-2">
                 <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full border border-blue-500/30">
                   {raceIcons[character.race] || '👤'}{' '}
-                  {raceNames[character.race]}
+                  <Translation id={`games.dnd.races.${character.race}`} />
                 </span>
                 <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full border border-purple-500/30">
                   {classIcons[character.class] || '⚔️'}{' '}
-                  {classNames[character.class]}
+                  <Translation id={`games.dnd.classes.${character.class}`} />
                 </span>
                 <span className="px-3 py-1 bg-orange-500/20 text-orange-300 text-sm rounded-full border border-orange-500/30">
                   {backgroundIcons[character.background] || '🎭'}{' '}
-                  {backgroundNames[character.background]}
+                  <Translation
+                    id={`games.dnd.backgrounds.${character.background}`}
+                  />
                 </span>
               </div>
             </div>
@@ -189,7 +188,7 @@ const CharacterSheet = () => {
                     d="M13 7l5 5m0 0l-5 5m5-5H6"
                   />
                 </svg>
-                Enter World
+                <Translation id="pages.character/[id].enterWorld" />
               </button>
             </div>
           </div>
@@ -262,7 +261,9 @@ const CharacterSheet = () => {
           {/* Stats Section */}
           <div className="lg:col-span-1">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-              <h2 className="text-2xl font-bold text-white mb-6">Stats</h2>
+              <h2 className="text-2xl font-bold text-white mb-6">
+                <Translation id="games.dnd.slang.stats" />
+              </h2>
               <div className="space-y-4">
                 {Object.entries(character.stats).map(([stat, value]) => {
                   const modifier = getStatModifier(value);
@@ -273,14 +274,16 @@ const CharacterSheet = () => {
                     >
                       <div className="flex flex-col">
                         <span className="text-gray-300 text-sm uppercase">
-                          {stat}
+                          <Translation id={`games.dnd.stats.${stat}`} />
                         </span>
                         <span className="text-white font-semibold">
                           {value}
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className="text-gray-400 text-sm">Modifier</span>
+                        <span className="text-gray-400 text-sm">
+                          <Translation id="games.dnd.slang.modifier" />
+                        </span>
                         <div className="text-white font-bold text-lg">
                           {getModifierDisplay(modifier)}
                         </div>
@@ -295,7 +298,9 @@ const CharacterSheet = () => {
           {/* Skills Section */}
           <div className="lg:col-span-2">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-              <h2 className="text-2xl font-bold text-white mb-6">Skills</h2>
+              <h2 className="text-2xl font-bold text-white mb-6">
+                <Translation id="games.dnd.slang.skills" />
+              </h2>
               <div className="grid md:grid-cols-2 gap-4">
                 {Object.keys(character.skills).map(skill => {
                   const isBackground = isBackgroundSkill(
@@ -326,7 +331,7 @@ const CharacterSheet = () => {
                       <div className="flex justify-between items-start">
                         <div className="flex items-center gap-2">
                           <span className="text-white font-semibold">
-                            {skillNames[skill as ESkills]}
+                            <Translation id={`games.dnd.skills.${skill}`} />
                           </span>
                         </div>
                         <div className="text-right">

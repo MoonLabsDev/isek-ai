@@ -157,31 +157,11 @@ export class DnD {
     [EBackground.Entertainer]: [ESkills.Acrobatics, ESkills.Performance],
     [EBackground.FolkHero]: [ESkills.AnimalHandling, ESkills.Survival],
     [EBackground.GuildArtisan]: [ESkills.Insight, ESkills.Persuasion],
-    [EBackground.Hermit]: [
-      ESkills.Medicine,
-      ESkills.Religion,
-      ESkills.Survival,
-    ],
-    [EBackground.Noble]: [
-      ESkills.History,
-      ESkills.Persuasion,
-      ESkills.Survival,
-    ],
-    [EBackground.Outlander]: [
-      ESkills.Athletics,
-      ESkills.Perception,
-      ESkills.Survival,
-    ],
-    [EBackground.Sage]: [
-      ESkills.Arcana,
-      ESkills.History,
-      ESkills.Investigation,
-    ],
-    [EBackground.Sailor]: [
-      ESkills.Athletics,
-      ESkills.Perception,
-      ESkills.Survival,
-    ],
+    [EBackground.Hermit]: [ESkills.Medicine, ESkills.Religion],
+    [EBackground.Noble]: [ESkills.History, ESkills.Persuasion],
+    [EBackground.Outlander]: [ESkills.Athletics, ESkills.Survival],
+    [EBackground.Sage]: [ESkills.Arcana, ESkills.History],
+    [EBackground.Sailor]: [ESkills.Athletics, ESkills.Perception],
   };
 
   // --- stats ---

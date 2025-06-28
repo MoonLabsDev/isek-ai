@@ -1,14 +1,8 @@
 'use client';
 
 import { useApi } from '@/contexts/ApiContext';
-import {
-  backgroundIcons,
-  backgroundNames,
-  classIcons,
-  classNames,
-  raceIcons,
-  raceNames,
-} from '@/utils/game';
+import { Translation } from '@/labels/Translation';
+import { backgroundIcons, classIcons, raceIcons } from '@/utils/game';
 import { ISchema_Character } from '@moonlabs/isek-ai-core/src/types';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -61,10 +55,10 @@ const CharactersList = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Character Sheets
+            <Translation id="pages.character.title" />
           </h1>
           <p className="text-xl text-gray-300">
-            View and manage your DnD characters
+            <Translation id="pages.character.description" />
           </p>
         </div>
 
@@ -74,17 +68,16 @@ const CharactersList = () => {
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-12">
               <div className="text-6xl mb-4">🎭</div>
               <h2 className="text-2xl font-bold text-white mb-4">
-                No Characters Found
+                <Translation id="pages.character.noCharactersFound" />
               </h2>
               <p className="text-gray-300 mb-6">
-                You haven't created any characters yet. Start your adventure by
-                creating a new character!
+                <Translation id="pages.character.noCharactersFoundDescription" />
               </p>
               <Link
                 href="/character/create"
                 className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold rounded-full hover:from-purple-600 hover:to-indigo-700 transition-all duration-300"
               >
-                Create Character
+                <Translation id="pages.character.createCharacter" />
                 <svg
                   className="ml-2 w-5 h-5"
                   fill="none"
@@ -127,15 +120,20 @@ const CharactersList = () => {
                   {/* Race, Class, and Background Badges */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     <span className="px-2 py-1 bg-blue-500/20 text-blue-300 text-xs rounded-full border border-blue-500/30">
-                      {raceIcons[character.race]} {raceNames[character.race]}
+                      {raceIcons[character.race]}{' '}
+                      <Translation id={`games.dnd.races.${character.race}`} />
                     </span>
                     <span className="px-2 py-1 bg-purple-500/20 text-purple-300 text-xs rounded-full border border-purple-500/30">
                       {classIcons[character.class]}{' '}
-                      {classNames[character.class]}
+                      <Translation
+                        id={`games.dnd.classes.${character.class}`}
+                      />
                     </span>
                     <span className="px-2 py-1 bg-orange-500/20 text-orange-300 text-xs rounded-full border border-orange-500/30">
                       {backgroundIcons[character.background]}{' '}
-                      {backgroundNames[character.background]}
+                      <Translation
+                        id={`games.dnd.backgrounds.${character.background}`}
+                      />
                     </span>
                   </div>
 
@@ -147,7 +145,7 @@ const CharactersList = () => {
                         className="text-center p-2 bg-white/5 rounded"
                       >
                         <div className="text-gray-400 text-xs uppercase">
-                          {stat}
+                          <Translation id={`games.dnd.stats.${stat}`} />
                         </div>
                         <div className="text-white font-semibold">{value}</div>
                       </div>
@@ -179,7 +177,7 @@ const CharactersList = () => {
                   d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                 />
               </svg>
-              Create New Character
+              <Translation id="pages.character.createCharacter" />
             </Link>
           </div>
         )}

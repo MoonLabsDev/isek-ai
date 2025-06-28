@@ -1,15 +1,8 @@
 'use client';
 
 import { useApi } from '@/contexts/ApiContext';
-import {
-  backgroundIcons,
-  backgroundNames,
-  classIcons,
-  classNames,
-  raceIcons,
-  raceNames,
-  skillNames,
-} from '@/utils/game';
+import { Translation } from '@/labels/Translation';
+import { backgroundIcons, classIcons, raceIcons } from '@/utils/game';
 import {
   DnD,
   EBackground,
@@ -96,7 +89,7 @@ const RaceClassBackgroundStep = ({
           >
             {Object.values(ERace).map(race => (
               <option key={race} value={race} className="bg-slate-800">
-                {raceIcons[race]} {raceNames[race]}
+                {raceIcons[race]} <Translation id={`games.dnd.races.${race}`} />
               </option>
             ))}
           </select>
@@ -121,7 +114,8 @@ const RaceClassBackgroundStep = ({
                 value={classType}
                 className="bg-slate-800"
               >
-                {classIcons[classType]} {classNames[classType]}
+                {classIcons[classType]}{' '}
+                <Translation id={`games.dnd.classes.${classType}`} />
               </option>
             ))}
           </select>
@@ -137,6 +131,7 @@ const RaceClassBackgroundStep = ({
             onChange={e =>
               updateForm({
                 background: e.target.value as EBackground,
+                selectedSkills: [],
               })
             }
             className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-purple-500"
@@ -147,7 +142,8 @@ const RaceClassBackgroundStep = ({
                 value={background}
                 className="bg-slate-800"
               >
-                {backgroundIcons[background]} {backgroundNames[background]}
+                {backgroundIcons[background]}{' '}
+                <Translation id={`games.dnd.backgrounds.${background}`} />
               </option>
             ))}
           </select>
@@ -164,7 +160,7 @@ const RaceClassBackgroundStep = ({
                     key={skill}
                     className="px-2 py-1 bg-blue-500/20 text-blue-300 text-xs rounded-full border border-blue-500/30"
                   >
-                    {skillNames[skill]}
+                    <Translation id={`games.dnd.skills.${skill}`} />
                   </span>
                 ))}
               </div>
@@ -211,12 +207,13 @@ const AbilityScoresStep = ({
           <div key={stat} className="bg-white/5 rounded-lg p-4">
             <div className="flex justify-between items-center mb-2">
               <label className="text-white font-medium capitalize">
-                {stat}
+                <Translation id={`games.dnd.stats.${stat}`} />
               </label>
               <div className="text-right">
                 <div className="text-white font-bold text-lg">{value}</div>
                 <div className="text-gray-400 text-sm">
-                  Modifier: {Math.floor((value - 10) / 2) >= 0 ? '+' : ''}
+                  <Translation id="games.dnd.slang.modifier" />:{' '}
+                  {Math.floor((value - 10) / 2) >= 0 ? '+' : ''}
                   {Math.floor((value - 10) / 2)}
                 </div>
               </div>
@@ -340,12 +337,11 @@ const SkillProficienciesStep = ({
             >
               <div className="space-y-2">
                 <div className="text-white font-medium">
-                  {skillNames[skill]}
+                  <Translation id={`games.dnd.skills.${skill}`} />
                 </div>
                 <div className="flex flex-wrap gap-1">
                   <span className="px-2 py-1 bg-gray-600/50 text-gray-300 text-xs rounded-full border border-gray-500/30">
-                    {abilityScore.charAt(0).toUpperCase() +
-                      abilityScore.slice(1)}{' '}
+                    <Translation id={`games.dnd.stats.${abilityScore}`} />{' '}
                     {modifierText}
                   </span>
                   {isBackgroundSkill && (
@@ -558,7 +554,7 @@ const CreateCharacter = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Create Your Character
+            <Translation id="pages.character/create.title" />
           </h1>
           <p className="text-xl text-gray-300">
             Step {currentStep} of {totalSteps}

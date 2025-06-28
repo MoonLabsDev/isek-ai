@@ -18,17 +18,6 @@ export const raceIcons = {
   [ERace.Tiefling]: '😈',
 };
 
-export const raceNames = {
-  [ERace.Dragonborn]: 'Dragonborn',
-  [ERace.Dwarf]: 'Dwarf',
-  [ERace.Elf]: 'Elf',
-  [ERace.Gnome]: 'Gnome',
-  [ERace.HalfElf]: 'Half-Elf',
-  [ERace.HalfOrc]: 'Half-Orc',
-  [ERace.Human]: 'Human',
-  [ERace.Tiefling]: 'Tiefling',
-};
-
 // Class icons
 export const classIcons = {
   [EClass.Barbarian]: '⚔️',
@@ -45,21 +34,6 @@ export const classIcons = {
   [EClass.Wizard]: '📚',
 };
 
-export const classNames = {
-  [EClass.Barbarian]: 'Barbarian',
-  [EClass.Bard]: 'Bard',
-  [EClass.Cleric]: 'Cleric',
-  [EClass.Druid]: 'Druid',
-  [EClass.Fighter]: 'Fighter',
-  [EClass.Monk]: 'Monk',
-  [EClass.Paladin]: 'Paladin',
-  [EClass.Ranger]: 'Ranger',
-  [EClass.Rogue]: 'Rogue',
-  [EClass.Sorcerer]: 'Sorcerer',
-  [EClass.Warlock]: 'Warlock',
-  [EClass.Wizard]: 'Wizard',
-};
-
 // Background icons
 export const backgroundIcons = {
   [EBackground.Acolyte]: '⛪',
@@ -73,42 +47,6 @@ export const backgroundIcons = {
   [EBackground.Outlander]: '🌲',
   [EBackground.Sage]: '📖',
   [EBackground.Sailor]: '⚓',
-};
-
-export const backgroundNames = {
-  [EBackground.Acolyte]: 'Acolyte',
-  [EBackground.Charlatan]: 'Charlatan',
-  [EBackground.Criminal]: 'Criminal',
-  [EBackground.Entertainer]: 'Entertainer',
-  [EBackground.FolkHero]: 'Folk Hero',
-  [EBackground.GuildArtisan]: 'Guild Artisan',
-  [EBackground.Hermit]: 'Hermit',
-  [EBackground.Noble]: 'Noble',
-  [EBackground.Outlander]: 'Outlander',
-  [EBackground.Sage]: 'Sage',
-  [EBackground.Sailor]: 'Sailor',
-};
-
-// Skill name mapping
-export const skillNames = {
-  [ESkills.Acrobatics]: 'Acrobatics',
-  [ESkills.AnimalHandling]: 'Animal Handling',
-  [ESkills.Arcana]: 'Arcana',
-  [ESkills.Athletics]: 'Athletics',
-  [ESkills.Deception]: 'Deception',
-  [ESkills.History]: 'History',
-  [ESkills.Insight]: 'Insight',
-  [ESkills.Intimidation]: 'Intimidation',
-  [ESkills.Investigation]: 'Investigation',
-  [ESkills.Medicine]: 'Medicine',
-  [ESkills.Nature]: 'Nature',
-  [ESkills.Perception]: 'Perception',
-  [ESkills.Performance]: 'Performance',
-  [ESkills.Persuasion]: 'Persuasion',
-  [ESkills.Religion]: 'Religion',
-  [ESkills.SleightOfHand]: 'Sleight of Hand',
-  [ESkills.Stealth]: 'Stealth',
-  [ESkills.Survival]: 'Survival',
 };
 
 // Helper function to get background skills for a character

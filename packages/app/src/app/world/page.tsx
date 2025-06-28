@@ -1,6 +1,7 @@
 'use client';
 
 import { useApi } from '@/contexts/ApiContext';
+import { Translation } from '@/labels/Translation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -63,10 +64,10 @@ const WorldsList = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Worlds
+            <Translation id="pages.world.title" />
           </h1>
           <p className="text-xl text-gray-300">
-            Explore and manage your DnD worlds
+            <Translation id="pages.world.description" />
           </p>
         </div>
 
@@ -76,17 +77,16 @@ const WorldsList = () => {
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-12">
               <div className="text-6xl mb-4">🌍</div>
               <h2 className="text-2xl font-bold text-white mb-4">
-                No Worlds Found
+                <Translation id="pages.world.noWorldsFound" />
               </h2>
               <p className="text-gray-300 mb-6">
-                You haven't created any worlds yet. Start your adventure by
-                creating a new world!
+                <Translation id="pages.world.noWorldsFoundDescription" />
               </p>
               <Link
                 href="/world/create"
                 className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold rounded-full hover:from-purple-600 hover:to-indigo-700 transition-all duration-300"
               >
-                Create World
+                <Translation id="pages.world.createWorld" />
                 <svg
                   className="ml-2 w-5 h-5"
                   fill="none"
@@ -184,7 +184,7 @@ const WorldsList = () => {
                   d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                 />
               </svg>
-              Create New World
+              <Translation id="pages.world.createWorld" />
             </Link>
           </div>
         )}

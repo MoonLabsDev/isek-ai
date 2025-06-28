@@ -2,8 +2,10 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
 import ConditionalNavigation from '@/components/ConditionalNavigation';
+
 import { ApiProvider } from '@/contexts/ApiContext';
 import { WebSocketClientProvider } from '@/contexts/WebSocketContext';
+import { TranslationManager } from '@/labels/Translation';
 
 import './globals.css';
 
@@ -38,10 +40,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen`}
       >
         <ApiProvider>
-          <WebSocketClientProvider>
-            <ConditionalNavigation />
-            <main>{children}</main>
-          </WebSocketClientProvider>
+          <TranslationManager>
+            <WebSocketClientProvider>
+              <ConditionalNavigation />
+              <main>{children}</main>
+            </WebSocketClientProvider>
+          </TranslationManager>
         </ApiProvider>
       </body>
     </html>

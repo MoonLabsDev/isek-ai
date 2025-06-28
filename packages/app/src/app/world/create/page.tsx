@@ -1,6 +1,7 @@
 'use client';
 
 import { useApi } from '@/contexts/ApiContext';
+import { Translation } from '@/labels/Translation';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -50,11 +51,11 @@ const CreateWorld = () => {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
             <h1 className="text-4xl md:text-5xl font-bold text-white">
-              Create New World
+              <Translation id="pages.world/create.title" />
             </h1>
           </div>
           <p className="text-xl text-gray-300">
-            Design your own DnD world and bring it to life
+            <Translation id="pages.world/create.description" />
           </p>
         </div>
 
@@ -64,7 +65,7 @@ const CreateWorld = () => {
             {/* World Name */}
             <div>
               <label className="block text-white font-medium mb-2">
-                World Name
+                <Translation id="pages.world/create.worldName" />
               </label>
               <input
                 type="text"
@@ -79,7 +80,7 @@ const CreateWorld = () => {
             {/* Description */}
             <div>
               <label className="block text-white font-medium mb-2">
-                Description
+                <Translation id="pages.world/create.worldDescription" />
               </label>
               <textarea
                 value={form.description}

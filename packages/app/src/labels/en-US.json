@@ -1,0 +1,125 @@
+{
+    "pages": {
+        "home": {
+        },
+        "world": {
+            "title": "Worlds",
+            "description": "Explore and manage your DnD worlds",
+            "noWorldsFound": "No Worlds Found",
+            "noWorldsFoundDescription": "You haven't created any worlds yet. Start your adventure by creating a new world!",
+            "createWorld": "Create World"
+        },
+        "world/create": {
+            "title": "Create New World",
+            "description": "Design your own DnD world and bring it to life",
+            "worldName": "World Name",
+            "worldDescription": "Description",
+            "createWorld": "Create World"
+        },
+        "world/[id]": {
+        },
+        "character": {
+            "title": "Character Sheets",
+            "description": "View and manage your DnD characters",
+            "noCharactersFound": "No Characters Found",
+            "noCharactersFoundDescription": "You haven't created any characters yet. Start your adventure by creating a new character!",
+            "createCharacter": "Create Character"
+        },
+        "character/create": {
+            "title": "Create Your Character"
+        },
+        "character/[id]": {
+            "enterWorld": "Enter World"
+        }
+    },
+    "menu": {
+        "home": "Home",
+        "characters": "Characters",
+        "worlds": "Worlds"
+    },
+    "components": {
+        "generateImageButton": {
+            "title": "Generate Image",
+            "generating": "Generating..."            
+        },
+        "imageGenerated": {
+            "noImageGenerated": "No image generated yet",
+            "clickGenerateImage": "Click \"Generate Image\" to create a visual representation of this world"
+        }
+    },
+    "games": {
+        "dnd": { 
+            "slang": {
+                "modifier": "Modifier",
+                "stats": "Stats",
+                "skills": "Skills"
+            },
+            "stats": {
+                "strength": "Strength",
+                "dexterity": "Dexterity",
+                "constitution": "Constitution",
+                "intelligence": "Intelligence",
+                "wisdom": "Wisdom",
+                "charisma": "Charisma"
+            },
+            "skills": {
+                "acrobatics": "Acrobatics",
+                "animalHandling": "Animal Handling",
+                "arcana": "Arcana",
+                "athletics": "Athletics",
+                "deception": "Deception",
+                "history": "History",
+                "insight": "Insight",
+                "intimidation": "Intimidation",
+                "investigation": "Investigation",
+                "medicine": "Medicine",
+                "nature": "Nature",
+                "perception": "Perception",
+                "performance": "Performance",
+                "persuasion": "Persuasion",
+                "religion": "Religion",
+                "sleightOfHand": "Sleight of Hand",
+                "stealth": "Stealth",
+                "survival": "Survival"
+            },
+            "backgrounds": {
+                "acolyte": "Acolyte",
+                "charlatan": "Charlatan",
+                "criminal": "Criminal",
+                "entertainer": "Entertainer",
+                "folkHero": "Folk Hero",
+                "guildArtisan": "Guild Artisan",
+                "hermit": "Hermit",
+                "noble": "Noble",
+                "outlander": "Outlander",
+                "sailor": "Sailor",
+                "sage": "Sage"
+            },
+            "classes": {
+                "barbarian": "Barbarian",
+                "bard": "Bard",
+                "cleric": "Cleric",
+                "druid": "Druid",
+                "fighter": "Fighter",
+                "monk": "Monk",
+                "paladin": "Paladin",
+                "ranger": "Ranger",
+                "rogue": "Rogue",
+                "sorcerer": "Sorcerer",
+                "warlock": "Warlock",
+                "wizard": "Wizard"
+            },
+            "races": {
+                "dwarf": "Dwarf",
+                "elf": "Elf",
+                "halfElf": "Half-Elf",
+                "halfOrc": "Half-Orc",
+                "halfling": "Halfling",
+                "human": "Human",
+                "dragonborn": "Dragonborn",
+                "gnome": "Gnome",
+                "tiefling": "Tiefling"
+            }
+        }
+    }
+}

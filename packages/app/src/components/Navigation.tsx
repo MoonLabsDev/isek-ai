@@ -1,5 +1,6 @@
 'use client';
 
+import { Translation } from '@/labels/Translation';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -8,17 +9,17 @@ const Navigation = () => {
 
   const navItems = [
     {
-      name: 'Home',
+      name: 'menu.home',
       href: '/',
       icon: '🏠',
     },
     {
-      name: 'Worlds',
+      name: 'menu.worlds',
       href: '/world',
       icon: '🌍',
     },
     {
-      name: 'Characters',
+      name: 'menu.characters',
       href: '/character',
       icon: '⚔️',
     },
@@ -55,7 +56,7 @@ const Navigation = () => {
                     `}
                   >
                     <span className="mr-2">{item.icon}</span>
-                    {item.name}
+                    <Translation id={item.name} />
                   </Link>
                 );
               })}
