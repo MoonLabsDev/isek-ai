@@ -1,4 +1,8 @@
-import { LLM_Client_OpenAI, TTS_ElevenLabs } from '@moonlabs/nodejs-tools-ai';
+import {
+  LLM_Client_OpenAI,
+  TTS_ElevenLabs,
+  TextToImage_OpenAI,
+} from '@moonlabs/nodejs-tools-ai';
 
 import { DB } from './DB';
 import { DnD } from './games/DnD/DnD';
@@ -10,6 +14,7 @@ export class IsekAI {
   private readonly llm_creative: LLM_Client_OpenAI;
   private readonly tts: TTS_ElevenLabs;
   private readonly db: DB;
+  private readonly textToImage: TextToImage_OpenAI;
 
   // --- create ---
 
@@ -18,6 +23,7 @@ export class IsekAI {
     this.llm_creative = new LLM_Client_OpenAI(false, 0.7);
     this.tts = new TTS_ElevenLabs('./generated/voices');
     this.db = new DB();
+    this.textToImage = new TextToImage_OpenAI('dall-e-3');
   }
 
   public async init() {
@@ -27,6 +33,11 @@ export class IsekAI {
   }
 
   // --- functions ---
+
+  public async generateImage(prompt: string) {
+    const image = await this.textToImage.generateImage_Base64(prompt);
+    return image;
+  }
 
   public async generateWorld(
     worldName: string,
@@ -43,8 +54,8 @@ export class IsekAI {
       ### Output Format:
       World:
       - Name: <world name>
-      - Description: <world description>
       - Level: <world level>
+      - Description: <world description>     
       `,
       `World name: ${worldName}
       Character level: ${level}

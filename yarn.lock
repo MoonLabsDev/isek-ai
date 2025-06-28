@@ -1225,21 +1225,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/config-array@npm:^0.20.1":
-  version: 0.20.1
-  resolution: "@eslint/config-array@npm:0.20.1"
+"@eslint/config-array@npm:^0.21.0":
+  version: 0.21.0
+  resolution: "@eslint/config-array@npm:0.21.0"
   dependencies:
     "@eslint/object-schema": ^2.1.6
     debug: ^4.3.1
     minimatch: ^3.1.2
-  checksum: fe5b518be9eb474a0050bb3d0427ae00967f56e6c204492d8fc0bc3086cf93a0174b7eafd657b2bfddb904b9785943435345985df28853e9354bfbf492b84226
+  checksum: 84d3ae7cb755af94dc158a74389f4c560757b13f2bb908f598f927b87b70a38e8152015ea2e9557c1b4afc5130ee1356f6cad682050d67aae0468bbef98bc3a8
   languageName: node
   linkType: hard
 
-"@eslint/config-helpers@npm:^0.2.1":
-  version: 0.2.3
-  resolution: "@eslint/config-helpers@npm:0.2.3"
-  checksum: 2f0610555e1d7231f03972c9b30df388d617d7b76c186760a9e55de827093e0a0a1d6449694b0673046692d57c836161d8b7bef81fa1f28533f25dc58a0093dd
+"@eslint/config-helpers@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@eslint/config-helpers@npm:0.3.0"
+  checksum: d4fe8242ef580806ddaa88309f4bb2d3e6be5524cc6d6197675106c6d048f766a3f9cdc2e8e33bbc97a123065792cac8314fc85ac2b3cf72610e8df59301d63a
   languageName: node
   linkType: hard
 
@@ -1278,10 +1278,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:9.29.0":
-  version: 9.29.0
-  resolution: "@eslint/js@npm:9.29.0"
-  checksum: 9688a729664af9cc8898f61cbfbeb46d383a67c6fa4cbb1f8f2aa080aa5c34cfd5a3e19da6dde4d56f33e44873cedf064d612bd0fdc0ac003f9b9f741bd4953e
+"@eslint/js@npm:9.30.0":
+  version: 9.30.0
+  resolution: "@eslint/js@npm:9.30.0"
+  checksum: 17bffce324fa2670ece4d9d4bd94481b38d00e1bcae5f3f8448e07af04e707a8a003b6c66328bd140f1d6cc70549e092ec1d63569c592b7898424023ba5d2e38
   languageName: node
   linkType: hard
 
@@ -1303,8 +1303,8 @@ __metadata:
   linkType: hard
 
 "@gradio/client@npm:^1.15.1":
-  version: 1.15.3
-  resolution: "@gradio/client@npm:1.15.3"
+  version: 1.15.4
+  resolution: "@gradio/client@npm:1.15.4"
   dependencies:
     "@types/eventsource": ^1.1.15
     bufferutil: ^4.0.7
@@ -1315,7 +1315,7 @@ __metadata:
     textlinestream: ^1.1.1
     typescript: ^5.0.0
     ws: ^8.13.0
-  checksum: 0c553d93d0a598a38e25bb5b0c73d33f4e38e405b03c02acd1abbcc4f8043975f32ae17558128ae19704673a24227c0e2f1ad466b8901e091c0347b43f3da8b9
+  checksum: b15701ebfe174d2b1c7b1de205c9a7500b8882858779130844f8cd85da52f5e5ee845467c13c02278eeccfc8e336596ea59805a69fdd4aaf8841a8abefaa6449
   languageName: node
   linkType: hard
 
@@ -1784,8 +1784,8 @@ __metadata:
   linkType: soft
 
 "@moonlabs/nodejs-tools-ai@npm:latest":
-  version: 0.1.2
-  resolution: "@moonlabs/nodejs-tools-ai@npm:0.1.2"
+  version: 0.1.5
+  resolution: "@moonlabs/nodejs-tools-ai@npm:0.1.5"
   dependencies:
     "@elevenlabs/elevenlabs-js": ^2.4.1
     "@gradio/client": ^1.15.1
@@ -1794,7 +1794,7 @@ __metadata:
     dotenv: ^16.5.0
     langchain: ^0.3.24
     openai: ^5.1.1
-  checksum: 22ee0b80a3f04c0c41267ccff2fced3300e2d6d75826b2afed602b91bad92f8289618851da2bbb5e000a77c9692b6a497c53250523e6266354a5ec1b916c77d4
+  checksum: 0c44a7ae6f7c9ee9af5c181325bf61fe5e73c2c0ed6ee18f284aaf3566f412cdbf3c0442c2ce9085e4eb3d77f7e8e44808a06efa8c1ed287732c676d9fa56921
   languageName: node
   linkType: hard
 
@@ -2563,11 +2563,11 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*, @types/node@npm:>=10.0.0":
-  version: 24.0.4
-  resolution: "@types/node@npm:24.0.4"
+  version: 24.0.6
+  resolution: "@types/node@npm:24.0.6"
   dependencies:
     undici-types: ~7.8.0
-  checksum: db036e3f1fea5a92fd6cd76064cf07d517b245ace73d6f46bcd8e35f38ff856f86f3311aabc7c7406de2bdae9f8308070541dacfce20fec2510d42b3cd00bb9e
+  checksum: bf4e1bfb9247e11406937c55ae20daeed1914605af3978d764766e3d60dd5491a741cdbf24ecf0a790ea1b250e14efcbd0fef189899ddf1e26fc34d017617523
   languageName: node
   linkType: hard
 
@@ -4823,16 +4823,16 @@ __metadata:
   linkType: hard
 
 "eslint@npm:^9":
-  version: 9.29.0
-  resolution: "eslint@npm:9.29.0"
+  version: 9.30.0
+  resolution: "eslint@npm:9.30.0"
   dependencies:
     "@eslint-community/eslint-utils": ^4.2.0
     "@eslint-community/regexpp": ^4.12.1
-    "@eslint/config-array": ^0.20.1
-    "@eslint/config-helpers": ^0.2.1
+    "@eslint/config-array": ^0.21.0
+    "@eslint/config-helpers": ^0.3.0
     "@eslint/core": ^0.14.0
     "@eslint/eslintrc": ^3.3.1
-    "@eslint/js": 9.29.0
+    "@eslint/js": 9.30.0
     "@eslint/plugin-kit": ^0.3.1
     "@humanfs/node": ^0.16.6
     "@humanwhocodes/module-importer": ^1.0.1
@@ -4868,7 +4868,7 @@ __metadata:
       optional: true
   bin:
     eslint: bin/eslint.js
-  checksum: fa4381d9d7db444912defcec93c54e6d470e24a73d5bae5b04b34b0fb03aad8a6cbedd79fe3f4e6120d5590785d02d633ce9f854a540283a62493f11d8ff9408
+  checksum: 19f4beb78f8f12dbb6960fbf767d775716c729db2a982c8043fbdbbb425e052252aae22a8f2d473de52c59c18c26532be1db46361b28398d762ad9bee6c9c202
   languageName: node
   linkType: hard
 

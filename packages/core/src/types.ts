@@ -33,6 +33,7 @@ export interface ISkills {
 export interface ISchema_World {
   id: string;
   name: string;
+  image?: string;
   level: number;
   description: string;
   story: string;

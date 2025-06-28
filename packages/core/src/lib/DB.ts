@@ -115,6 +115,25 @@ export class DB {
     return worlds;
   }
 
+  public async setWorldImage(worldId: string, imageUrl: string) {
+    // update world's image
+    const result = await this.collections.worlds?.updateOne(
+      { id: worldId },
+      {
+        $set: {
+          image: imageUrl,
+          updatedAt: Date.now(),
+        },
+      }
+    );
+
+    if (!result || result.matchedCount === 0) {
+      throw new Error('World not found');
+    }
+
+    return result;
+  }
+
   // --- character functions ---
 
   public async createCharacter(

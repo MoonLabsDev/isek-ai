@@ -10,6 +10,7 @@ interface World {
   description: string;
   story: string;
   level: number;
+  image?: string;
   createdAt: number;
   updatedAt: number;
 }
@@ -113,12 +114,9 @@ const WorldsList = () => {
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 h-full transform transition-all duration-300 hover:scale-105 hover:bg-white/15">
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h3 className="text-xl font-bold text-white mb-2">
+                      <h3 className="text-2xl font-bold text-white mb-2">
                         {world.name}
                       </h3>
-                      <p className="text-gray-300 text-sm line-clamp-3">
-                        {world.description}
-                      </p>
                     </div>
                     <div className="text-right">
                       <div className="text-2xl font-bold text-white">
@@ -127,19 +125,39 @@ const WorldsList = () => {
                     </div>
                   </div>
 
-                  {/* Story Preview */}
-                  <div className="mb-4">
-                    <div className="text-gray-400 text-xs uppercase mb-1">
-                      Story
+                  {world.image ? (
+                    <div className="mb-6">
+                      <img
+                        src={`data:image/png;base64,${world.image}`}
+                        alt={`${world.name} world image`}
+                        className="w-full h-48 object-cover rounded-lg shadow-lg"
+                        onError={e => {
+                          // Hide the image and show description instead if image fails to load
+                          e.currentTarget.style.display = 'none';
+                          e.currentTarget.nextElementSibling?.classList.remove(
+                            'hidden'
+                          );
+                        }}
+                      />
+                      <p className="text-gray-300 hidden">
+                        {world.description.split('\n').map((l, i) => (
+                          <span key={i}>
+                            {l}
+                            <br />
+                          </span>
+                        ))}
+                      </p>
                     </div>
-                    <p className="text-gray-300 text-sm line-clamp-3">
-                      {world.story}
+                  ) : (
+                    <p className="text-gray-300 mb-6">
+                      {world.description.split('\n').map((l, i) => (
+                        <span key={i}>
+                          {l}
+                          <br />
+                        </span>
+                      ))}
                     </p>
-                  </div>
-
-                  <div className="mt-4 text-gray-400 text-xs">
-                    Created: {new Date(world.createdAt).toLocaleDateString()}
-                  </div>
+                  )}
                 </div>
               </Link>
             ))}

@@ -22,6 +22,10 @@ interface ApiContextType {
     createWorld: (worldData: any) => Promise<ApiResponse>;
     getWorlds: () => Promise<ApiResponse>;
     getWorld: (id: string) => Promise<ApiResponse>;
+    generateWorldImage: (
+      worldId: string,
+      prompt: string
+    ) => Promise<ApiResponse>;
 
     // Generic fetch method
     fetch: <T = any>(
@@ -150,6 +154,16 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
     [fetchApi]
   );
 
+  const generateWorldImage = useCallback(
+    async (worldId: string, prompt: string): Promise<ApiResponse> => {
+      return fetchApi(`/api/v1/world/${worldId}/generate-image`, {
+        method: 'POST',
+        body: JSON.stringify({ prompt }),
+      });
+    },
+    [fetchApi]
+  );
+
   return (
     <ApiContext.Provider
       value={{
@@ -163,6 +177,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
           getWorlds,
           getWorld,
           createWorld,
+          generateWorldImage,
           fetch: fetchApi,
         },
       }}
