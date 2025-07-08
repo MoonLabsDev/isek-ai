@@ -32,7 +32,7 @@ export class IsekAI {
     await this.llm_creative.init();
   }
 
-  // --- functions ---
+  // --- generate functions ---
 
   public async generateImage(prompt: string) {
     const image = await this.textToImage.generateImage_Base64(prompt);
@@ -80,7 +80,33 @@ export class IsekAI {
       `###${world}`
     );
 
-    // extract and generate locations
+    // enerate locations
+    const locations = await this.generateLocations(
+      worldName,
+      description,
+      story
+    );
+
+    // extract and generate NPCs
+    const npcs = await this.generateNPCs(worldName, description, story);
+
+    // return
+    return {
+      name: worldName,
+      level,
+      description: world,
+      story,
+      locations,
+      npcs,
+    };
+  }
+
+  private async generateLocations(
+    worldId: string,
+    worldDescription: string,
+    story: string
+  ) {
+    // generate locations
     const locations = await this.llm_creative.prompt(
       `${DnD.systemPrompt}
       Extract the locations from the story and generate a list of locations with a name and a very short description.
@@ -94,12 +120,49 @@ export class IsekAI {
       - ...
 
       `,
-      `### ${world}
+      `### ${worldDescription}
 
       ### ${story}`
     );
 
-    // extract and generate NPCs
+    // extract locations
+    const extractedLocations = await this.llm_creative.prompt(
+      `${DnD.systemPrompt}
+      Extract the locations from the input and format it as JSON like this:
+
+      [
+        {
+          "name": <location name 1>,
+          "description": <location description 1>,
+        },
+        {
+          "name": <location name 2>,
+          "description": <location description 2>,
+        }
+      ]
+      `,
+      locations
+    );
+
+    // parse JSON and create locations
+    const json = JSON.parse(extractedLocations);
+    for (const l of json) {
+      await this.db.createLocation({
+        worldId,
+        name: l.name as string,
+        description: l.description as string,
+      });
+    }
+
+    return locations;
+  }
+
+  private async generateNPCs(
+    worldId: string,
+    worldDescription: string,
+    story: string
+  ) {
+    // generate NPCs
     const npcs = await this.llm_creative.prompt(
       `${DnD.systemPrompt}
       Extract the NPCs from the story and generate a list of importantNPCs with a name and a very short description.
@@ -113,21 +176,42 @@ export class IsekAI {
       - <NPC name 3>: <NPC description>
       - ...
       `,
-      `### ${world}
+      `### ${worldDescription}
 
       ### ${story}`
     );
-    console.log(npcs);
 
-    // return
-    return {
-      name: worldName,
-      level,
-      description: world,
-      story,
-      locations,
-      npcs,
-    };
+    // extract NPCs
+    const extractedNPCs = await this.llm_creative.prompt(
+      `${DnD.systemPrompt}
+      Extract the NPCs from the input and format it as JSON like this:
+
+      [
+        {
+          "name": <NPC name 1>,
+          "description": <NPC description 1>,
+        },
+        {
+          "name": <NPC name 2>,
+          "description": <NPC description 2>,
+        }
+      ]
+      `,
+      npcs
+    );
+
+    // parse JSON and create NPCs
+    const json = JSON.parse(extractedNPCs);
+    for (const n of json) {
+      await this.db.createNPC({
+        worldId,
+        name: n.name as string,
+        description: n.description as string,
+        voice: '',
+      });
+    }
+
+    return npcs;
   }
 
   public async generateCharacter(

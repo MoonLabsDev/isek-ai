@@ -71,9 +71,19 @@ export interface ISchema_Location {
   id: string;
   worldId: string;
   name: string;
+  image?: string;
   description: string;
-  type: string;
-  coordinates: Record<string, number>;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface ISchema_NPC {
+  id: string;
+  worldId: string;
+  name: string;
+  image?: string;
+  description: string;
+  voice: string;
   createdAt: number;
   updatedAt: number;
 }

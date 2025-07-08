@@ -3,6 +3,7 @@ import {
   ISchema_Character,
   ISchema_Item,
   ISchema_Location,
+  ISchema_NPC,
   ISchema_World,
 } from '../types';
 import { DnD } from './games';
@@ -20,11 +21,13 @@ export class DB {
     characters: Collection<ISchema_Character> | null;
     items: Collection<ISchema_Item> | null;
     locations: Collection<ISchema_Location> | null;
+    npcs: Collection<ISchema_NPC> | null;
   } = {
     worlds: null,
     characters: null,
     items: null,
     locations: null,
+    npcs: null,
   };
 
   // --- create ---
@@ -44,6 +47,7 @@ export class DB {
     this.collections.characters = this.db?.collection('characters');
     this.collections.items = this.db?.collection('items');
     this.collections.locations = this.db?.collection('locations');
+    this.collections.npcs = this.db?.collection('npcs');
   }
 
   public async disconnect() {
@@ -78,7 +82,7 @@ export class DB {
     }
   }
 
-  // --- worldfunctions ---
+  // --- world functions ---
 
   public async createWorld(
     world: Omit<ISchema_World, 'id' | 'createdAt' | 'updatedAt'>
@@ -210,5 +214,121 @@ export class DB {
     // get all characters
     const characters = await this.collections.characters?.find().toArray();
     return characters;
+  }
+
+  // --- NPC functions ---
+
+  public async createNPC(
+    npc: Omit<ISchema_NPC, 'id' | 'createdAt' | 'updatedAt'>
+  ) {
+    // generate metadata
+    const genNPC: ISchema_NPC = {
+      id: crypto.randomUUID(),
+      ...npc,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+
+    // check if NPC already exists
+    const existingNPC = await this.collections.npcs?.findOne({ id: genNPC.id });
+    if (existingNPC) throw new Error('NPC already exists');
+
+    // create NPC
+    await this.collections.npcs?.insertOne(genNPC);
+
+    return genNPC;
+  }
+
+  public async getNPC(id: string) {
+    // get NPC
+    const npc = await this.collections.npcs?.findOne({ id });
+    return npc;
+  }
+
+  public async getWorldNPCs(worldId: string) {
+    // get NPCs
+    const npcs = await this.collections.npcs?.find({ worldId }).toArray();
+    return npcs;
+  }
+
+  public async updateNPCVoice(npcId: string, voice: string) {
+    // update NPC's voice
+    const result = await this.collections.npcs?.updateOne(
+      { id: npcId },
+      { $set: { voice, updatedAt: Date.now() } }
+    );
+
+    if (!result || result.matchedCount === 0) {
+      throw new Error('NPC not found');
+    }
+
+    return result;
+  }
+
+  public async setNPCImage(npcId: string, imageUrl: string) {
+    // update NPC's image
+    const result = await this.collections.npcs?.updateOne(
+      { id: npcId },
+      { $set: { image: imageUrl, updatedAt: Date.now() } }
+    );
+
+    if (!result || result.matchedCount === 0) {
+      throw new Error('NPC not found');
+    }
+
+    return result;
+  }
+
+  // --- Location functions ---
+
+  public async createLocation(
+    location: Omit<ISchema_Location, 'id' | 'createdAt' | 'updatedAt'>
+  ) {
+    // generate metadata
+    const genLocation: ISchema_Location = {
+      id: crypto.randomUUID(),
+      ...location,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+
+    // check if location already exists
+    const existingLocation = await this.collections.locations?.findOne({
+      id: genLocation.id,
+    });
+    if (existingLocation) throw new Error('Location already exists');
+
+    // create location
+    await this.collections.locations?.insertOne(genLocation);
+
+    return genLocation;
+  }
+
+  public async getLocation(id: string) {
+    // get location
+    const location = await this.collections.locations?.findOne({ id });
+    return location;
+  }
+
+  public async getWorldLocations(worldId: string) {
+    // get locations
+    const locations = await this.collections.locations
+      ?.find({ worldId })
+      .toArray();
+    return locations;
+  }
+
+  public async setLocationImage(locationId: string, imageUrl: string) {
+    // update location's image
+    const result = await this.collections.locations?.updateOne(
+      { id: locationId },
+      { $set: { image: imageUrl, updatedAt: Date.now() } }
+    );
+
+    if (!result || result.matchedCount === 0) {
+      throw new Error('Location not found');
+    }
+
+    return result;
   }
 }

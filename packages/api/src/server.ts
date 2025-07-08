@@ -8,7 +8,12 @@ import https from 'https';
 
 import { Server } from 'socket.io';
 
-import { character_routes, world_routes } from './routes';
+import {
+  character_routes,
+  location_routes,
+  npc_routes,
+  world_routes,
+} from './routes';
 import { setup_websocket } from './websocket';
 
 import { global } from './globals';
@@ -57,6 +62,8 @@ if (FORCE_HTTPS && httpsServer) {
 // routes
 world_routes(app);
 character_routes(app);
+location_routes(app);
+npc_routes(app);
 
 // websocket
 setup_websocket(ioHttp);
