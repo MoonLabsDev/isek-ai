@@ -34,12 +34,9 @@ const handleCreateWorld = async (req: Request, res: Response) => {
   );
   console.log(chalk.blue(`- NPCs:\n${chalk.yellow(genWorld.npcs)}`));
 
-  // Save world to database
-  const world = await global.db.createWorld(genWorld);
-
   res.status(201).json({
     success: true,
-    world,
+    world: genWorld,
   });
 };
 

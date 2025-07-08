@@ -27,6 +27,17 @@ interface ApiContextType {
       prompt: string
     ) => Promise<ApiResponse>;
 
+    // Location endpoints
+    getLocations: (worldId: string) => Promise<ApiResponse>;
+    generateLocationImage: (
+      locationId: string,
+      prompt: string
+    ) => Promise<ApiResponse>;
+
+    // NPC endpoints
+    getNPCs: (worldId: string) => Promise<ApiResponse>;
+    generateNPCImage: (npcId: string, prompt: string) => Promise<ApiResponse>;
+
     // Generic fetch method
     fetch: <T = any>(
       endpoint: string,
@@ -164,6 +175,42 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
     [fetchApi]
   );
 
+  // Location endpoints
+  const getLocations = useCallback(
+    async (worldId: string): Promise<ApiResponse> => {
+      return fetchApi(`/api/v1/location/list/${worldId}`);
+    },
+    [fetchApi]
+  );
+
+  const generateLocationImage = useCallback(
+    async (locationId: string, prompt: string): Promise<ApiResponse> => {
+      return fetchApi(`/api/v1/location/${locationId}/generate-image`, {
+        method: 'POST',
+        body: JSON.stringify({ prompt }),
+      });
+    },
+    [fetchApi]
+  );
+
+  // NPC endpoints
+  const getNPCs = useCallback(
+    async (worldId: string): Promise<ApiResponse> => {
+      return fetchApi(`/api/v1/npc/list/${worldId}`);
+    },
+    [fetchApi]
+  );
+
+  const generateNPCImage = useCallback(
+    async (npcId: string, prompt: string): Promise<ApiResponse> => {
+      return fetchApi(`/api/v1/npc/${npcId}/generate-image`, {
+        method: 'POST',
+        body: JSON.stringify({ prompt }),
+      });
+    },
+    [fetchApi]
+  );
+
   return (
     <ApiContext.Provider
       value={{
@@ -178,6 +225,10 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
           getWorld,
           createWorld,
           generateWorldImage,
+          getLocations,
+          generateLocationImage,
+          getNPCs,
+          generateNPCImage,
           fetch: fetchApi,
         },
       }}

@@ -45,7 +45,7 @@ export class IsekAI {
     level: number
   ) {
     // generate world
-    const world = await this.llm_creative.prompt(
+    const worldDescription = await this.llm_creative.prompt(
       `${DnD.systemPrompt}
       Generate a world description as context for a system prompt.
       The user will give you a name and a world description. Modify the description to be short and precise to give the AI a description of the world to generate.
@@ -77,28 +77,29 @@ export class IsekAI {
       - ...
 
       `,
-      `###${world}`
+      `###${worldDescription}`
     );
 
-    // enerate locations
+    // save world to database
+    const worldData = await this.db.createWorld({
+      name: worldName,
+      description: worldDescription,
+      level,
+      story,
+    });
+
+    // generate locations
     const locations = await this.generateLocations(
-      worldName,
-      description,
+      worldData.id,
+      worldDescription,
       story
     );
 
     // extract and generate NPCs
-    const npcs = await this.generateNPCs(worldName, description, story);
+    const npcs = await this.generateNPCs(worldData.id, worldDescription, story);
 
     // return
-    return {
-      name: worldName,
-      level,
-      description: world,
-      story,
-      locations,
-      npcs,
-    };
+    return { ...worldData, locations, npcs };
   }
 
   private async generateLocations(
@@ -143,6 +144,7 @@ export class IsekAI {
       `,
       locations
     );
+    console.log(extractedLocations);
 
     // parse JSON and create locations
     const json = JSON.parse(extractedLocations);
@@ -199,6 +201,7 @@ export class IsekAI {
       `,
       npcs
     );
+    console.log(extractedNPCs);
 
     // parse JSON and create NPCs
     const json = JSON.parse(extractedNPCs);

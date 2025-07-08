@@ -4,12 +4,14 @@ interface Image_GeneratedProps {
   image?: string;
   altText: string;
   height?: string;
+  width?: string;
 }
 
 const Image_Generated = ({
   image,
   altText,
   height = 'h-96',
+  width = 'w-full',
 }: Image_GeneratedProps) => {
   if (image) {
     return (
@@ -17,7 +19,7 @@ const Image_Generated = ({
         <img
           src={`data:image/png;base64,${image}`}
           alt={altText}
-          className={`w-full ${height} object-cover rounded-lg shadow-lg`}
+          className={`${width} ${height} object-cover rounded-lg shadow-lg`}
           onError={e => {
             e.currentTarget.style.display = 'none';
           }}
@@ -28,7 +30,7 @@ const Image_Generated = ({
 
   return (
     <div
-      className={`flex items-center justify-center ${height} bg-gray-800/50 rounded-lg border-2 border-dashed border-gray-600`}
+      className={`flex items-center justify-center ${width} ${height} bg-gray-800/50 rounded-lg border-2 border-dashed border-gray-600`}
     >
       <div className="text-center text-gray-400">
         <svg
