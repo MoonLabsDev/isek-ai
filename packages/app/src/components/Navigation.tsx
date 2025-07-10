@@ -3,9 +3,12 @@
 import { Translation } from '@/labels/Translation';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 const Navigation = () => {
   const pathname = usePathname();
+
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const navItems = [
     {
@@ -70,6 +73,7 @@ const Navigation = () => {
               className="bg-white/10 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
               aria-controls="mobile-menu"
               aria-expanded="false"
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
             >
               <span className="sr-only">Open main menu</span>
               <svg
@@ -93,7 +97,10 @@ const Navigation = () => {
       </div>
 
       {/* Mobile menu */}
-      <div className="md:hidden" id="mobile-menu">
+      <div
+        className={`md:hidden ${showMobileMenu ? 'block' : 'hidden'}`}
+        id="mobile-menu"
+      >
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
           {navItems.map(item => {
             const isActive = pathname === item.href;
@@ -111,7 +118,7 @@ const Navigation = () => {
                 `}
               >
                 <span className="mr-2">{item.icon}</span>
-                {item.name}
+                <Translation id={item.name} />
               </Link>
             );
           })}

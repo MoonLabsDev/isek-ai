@@ -326,7 +326,7 @@ const CharacterSheet = () => {
                             ? 'bg-emerald-500/20 border-emerald-500/50'
                             : 'bg-white/5 border-white/20'
                       }`}
-                      title={`${stat} ${getModifierDisplay(modifier)} ${getModifierDisplay(proficiencyBonus)}`}
+                      title={`${getModifierDisplay(modifier)} ${getModifierDisplay(proficiencyBonus)}`}
                     >
                       <div className="flex justify-between items-start">
                         <div className="flex items-center gap-2">
@@ -336,7 +336,7 @@ const CharacterSheet = () => {
                         </div>
                         <div className="text-right">
                           <span className="text-white font-bold text-lg">
-                            {stat + modifier + proficiencyBonus}
+                            {modifier + proficiencyBonus}
                           </span>
                         </div>
                       </div>

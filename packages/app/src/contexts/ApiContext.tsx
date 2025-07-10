@@ -1,6 +1,12 @@
 'use client';
 
-import { createContext, useCallback, useContext, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 interface ApiResponse<T = any> {
   success: boolean;
@@ -60,12 +66,29 @@ interface ApiProviderProps {
   children: React.ReactNode;
 }
 
+const apiValue: ApiContextType = {
+  loading: false,
+  error: null,
+  api: {
+    getCharacter: async () => ({ success: false }),
+    getCharacters: async () => ({ success: false }),
+    createCharacter: async () => ({ success: false }),
+    joinWorld: async () => ({ success: false }),
+    getWorlds: async () => ({ success: false }),
+    getWorld: async () => ({ success: false }),
+    generateWorldImage: async () => ({ success: false }),
+    getLocations: async () => ({ success: false }),
+    generateLocationImage: async () => ({ success: false }),
+    getNPCs: async () => ({ success: false }),
+    generateNPCImage: async () => ({ success: false }),
+    fetch: async () => ({ success: false }),
+    createWorld: async () => ({ success: false }),
+  },
+};
+
 export const ApiProvider = ({ children }: ApiProviderProps) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // Base URL configuration
-  const baseUrl = 'http://localhost:3001';
 
   // Generic fetch method
   const fetchApi = useCallback(
@@ -75,6 +98,8 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
     ): Promise<ApiResponse<T>> => {
       setLoading(true);
       setError(null);
+
+      const baseUrl = `${location.protocol}//${location.hostname}:3001`;
 
       try {
         const url = `${baseUrl}${endpoint}`;
@@ -211,29 +236,26 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
     [fetchApi]
   );
 
-  return (
-    <ApiContext.Provider
-      value={{
-        loading,
-        error,
-        api: {
-          getCharacter,
-          getCharacters,
-          createCharacter,
-          joinWorld,
-          getWorlds,
-          getWorld,
-          createWorld,
-          generateWorldImage,
-          getLocations,
-          generateLocationImage,
-          getNPCs,
-          generateNPCImage,
-          fetch: fetchApi,
-        },
-      }}
-    >
-      {children}
-    </ApiContext.Provider>
-  );
+  // refresh values
+  useEffect(() => {
+    apiValue.loading = loading;
+    apiValue.error = error;
+  }, [loading, error]);
+  apiValue.api = {
+    getCharacter,
+    getCharacters,
+    createCharacter,
+    joinWorld,
+    getWorlds,
+    getWorld,
+    createWorld,
+    generateWorldImage,
+    getLocations,
+    generateLocationImage,
+    getNPCs,
+    generateNPCImage,
+    fetch: fetchApi,
+  };
+
+  return <ApiContext.Provider value={apiValue}>{children}</ApiContext.Provider>;
 };
