@@ -108,6 +108,7 @@ const Navigation = () => {
               <Link
                 key={item.name}
                 href={item.href}
+                onClick={() => setShowMobileMenu(false)}
                 className={`
                   block px-3 py-2 rounded-md text-base font-medium transition-all duration-200
                   ${
