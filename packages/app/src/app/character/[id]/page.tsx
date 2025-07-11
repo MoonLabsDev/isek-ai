@@ -7,6 +7,7 @@ import {
   classIcons,
   isBackgroundSkill,
   raceIcons,
+  statBorderColors,
 } from '@/utils/game';
 import { DnD, ESkills } from '@moonlabs/isek-ai-core/src/lib/games/DnD';
 import {
@@ -270,7 +271,9 @@ const CharacterSheet = () => {
                   return (
                     <div
                       key={stat}
-                      className="flex justify-between items-center p-3 bg-white/5 rounded-lg"
+                      className={`flex justify-between items-center p-3 rounded-lg border-2 ${
+                        statBorderColors[stat as keyof typeof statBorderColors]
+                      }`}
                     >
                       <div className="flex flex-col">
                         <span className="text-gray-300 text-sm uppercase">
@@ -319,7 +322,7 @@ const CharacterSheet = () => {
                   return (
                     <div
                       key={skill}
-                      className={`p-4 rounded-lg border-2 transition-all duration-200 ${
+                      className={`p-2 rounded-lg border-2 transition-all duration-200 ${
                         isBackground
                           ? 'bg-blue-500/20 border-blue-500/50'
                           : isProficient

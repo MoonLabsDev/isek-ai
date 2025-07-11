@@ -4,7 +4,13 @@ import { ChatWindow } from '@/components/chat/ChatWindow';
 import { useApi } from '@/contexts/ApiContext';
 import { useWebSocketClient } from '@/contexts/WebSocketContext';
 import { Translation } from '@/labels/Translation';
-import { isBackgroundSkill } from '@/utils/game';
+import {
+  backgroundIcons,
+  classIcons,
+  isBackgroundSkill,
+  raceIcons,
+  statBorderColors,
+} from '@/utils/game';
 import { DnD, ESkills } from '@moonlabs/isek-ai-core/src/lib/games/DnD';
 import {
   ISchema_Character,
@@ -33,10 +39,9 @@ const GamePage = () => {
   const [error, setError] = useState<string | null>(null);
 
   const tabs: Tab[] = [
-    { id: 'world', name: 'World', icon: '🌍' },
     { id: 'character', name: 'Character', icon: '⚔️' },
-    { id: 'inventory', name: 'Inventory', icon: '🎒' },
-    { id: 'story', name: 'Story', icon: '📖' },
+    { id: 'inventory', name: 'Inventory', icon: '📦' },
+    { id: 'story', name: 'Story', icon: '🪶' },
   ];
 
   // Helper function to get stat modifier
@@ -117,39 +122,6 @@ const GamePage = () => {
     }
 
     switch (activeTab) {
-      case 'world':
-        return (
-          <div className="p-4">
-            <h3 className="text-lg font-semibold text-white mb-4">
-              World Information
-            </h3>
-            {selectedWorld ? (
-              <div className="space-y-4">
-                <div>
-                  <h4 className="text-white font-medium mb-2">
-                    {selectedWorld.name}
-                  </h4>
-                  <p className="text-gray-300 text-sm">
-                    {selectedWorld.description}
-                  </p>
-                </div>
-                <div>
-                  <h4 className="text-white font-medium mb-2">Story</h4>
-                  <p className="text-gray-300 text-sm">{selectedWorld.story}</p>
-                </div>
-                <div>
-                  <h4 className="text-white font-medium mb-2">Level</h4>
-                  <p className="text-gray-300 text-sm">
-                    Level {selectedWorld.level}
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <p className="text-gray-400 text-sm">No world selected</p>
-            )}
-          </div>
-        );
-
       case 'character':
         return (
           <div className="p-4">
@@ -159,48 +131,43 @@ const GamePage = () => {
             {selectedCharacter ? (
               <div className="space-y-6">
                 <div>
-                  <h4 className="text-white font-medium mb-2">
-                    {selectedCharacter.name}
-                  </h4>
-                  <p className="text-gray-300 text-sm">
-                    {selectedCharacter.description}
-                  </p>
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h4 className="text-white font-medium mb-2">
+                        {selectedCharacter.name}
+                      </h4>
+                      <p className="text-gray-300 text-sm">
+                        {selectedCharacter.description}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-white">
+                        Level {selectedCharacter.level}
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div>
                   <h4 className="text-white font-medium mb-2">Basic Info</h4>
-                  <div className="grid grid-cols-2 gap-2 mb-4">
-                    <div className="bg-white/5 rounded p-2">
-                      <div className="text-gray-400 text-xs uppercase">
-                        Race
-                      </div>
-                      <div className="text-white font-semibold">
-                        {selectedCharacter.race}
-                      </div>
-                    </div>
-                    <div className="bg-white/5 rounded p-2">
-                      <div className="text-gray-400 text-xs uppercase">
-                        Class
-                      </div>
-                      <div className="text-white font-semibold">
-                        {selectedCharacter.class}
-                      </div>
-                    </div>
-                    <div className="bg-white/5 rounded p-2">
-                      <div className="text-gray-400 text-xs uppercase">
-                        Background
-                      </div>
-                      <div className="text-white font-semibold">
-                        {selectedCharacter.background}
-                      </div>
-                    </div>
-                    <div className="bg-white/5 rounded p-2">
-                      <div className="text-gray-400 text-xs uppercase">
-                        Level
-                      </div>
-                      <div className="text-white font-semibold">
-                        {selectedCharacter.level}
-                      </div>
-                    </div>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full border border-blue-500/30">
+                      {raceIcons[selectedCharacter.race]}{' '}
+                      <Translation
+                        id={`games.dnd.races.${selectedCharacter.race}`}
+                      />
+                    </span>
+                    <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full border border-purple-500/30">
+                      {classIcons[selectedCharacter.class]}{' '}
+                      <Translation
+                        id={`games.dnd.classes.${selectedCharacter.class}`}
+                      />
+                    </span>
+                    <span className="px-3 py-1 bg-orange-500/20 text-orange-300 text-sm rounded-full border border-orange-500/30">
+                      {backgroundIcons[selectedCharacter.background]}{' '}
+                      <Translation
+                        id={`games.dnd.backgrounds.${selectedCharacter.background}`}
+                      />
+                    </span>
                   </div>
                 </div>
                 <div>
@@ -208,7 +175,10 @@ const GamePage = () => {
                   <div className="grid grid-cols-2 gap-2 mb-4">
                     {Object.entries(selectedCharacter.stats).map(
                       ([stat, value]) => (
-                        <div key={stat} className="bg-white/5 rounded p-2">
+                        <div
+                          key={stat}
+                          className={`bg-white/5 rounded p-2 border-2 text-center ${statBorderColors[stat as keyof typeof statBorderColors]}`}
+                        >
                           <div className="text-gray-400 text-xs uppercase">
                             {stat}
                           </div>
@@ -222,7 +192,7 @@ const GamePage = () => {
                 </div>
                 <div>
                   <h4 className="text-white font-medium mb-2">Skills</h4>
-                  <div className="grid grid-cols-1 gap-2">
+                  <div className="grid grid-cols-2 gap-2">
                     {Object.keys(selectedCharacter.skills).map(skill => {
                       const isBackground = isBackgroundSkill(
                         skill as ESkills,
@@ -259,24 +229,6 @@ const GamePage = () => {
                               <span className="text-white font-semibold text-sm">
                                 <Translation id={`games.dnd.skills.${skill}`} />
                               </span>
-                              <div className="flex gap-1">
-                                <span className="px-2 py-1 bg-gray-600/50 text-gray-300 text-xs rounded-full border border-gray-500/30">
-                                  <Translation
-                                    id={`games.dnd.stats.${DnD.skillStats[skill as ESkills]}`}
-                                  />{' '}
-                                  {getModifierDisplay(modifier)}
-                                </span>
-                                {isBackground && (
-                                  <span className="px-2 py-1 bg-blue-500 text-white text-xs rounded-full">
-                                    Background +{proficiencyBonus}
-                                  </span>
-                                )}
-                                {isProficient && !isBackground && (
-                                  <span className="px-2 py-1 bg-emerald-500 text-white text-xs rounded-full">
-                                    Proficient +{proficiencyBonus}
-                                  </span>
-                                )}
-                              </div>
                             </div>
                             <div className="text-right">
                               <span className="text-white font-bold text-lg">

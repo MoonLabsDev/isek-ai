@@ -2,7 +2,12 @@
 
 import { useApi } from '@/contexts/ApiContext';
 import { Translation } from '@/labels/Translation';
-import { backgroundIcons, classIcons, raceIcons } from '@/utils/game';
+import {
+  backgroundIcons,
+  classIcons,
+  raceIcons,
+  statBorderColors,
+} from '@/utils/game';
 import { ISchema_Character } from '@moonlabs/isek-ai-core/src/types';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -118,7 +123,7 @@ const CharactersList = () => {
                   </div>
 
                   {/* Race, Class, and Background Badges */}
-                  <div className="flex flex-wrap gap-2 mb-4">
+                  <div className="flex flex-wrap gap-2 mb-4 justify-center">
                     <span className="px-2 py-1 bg-blue-500/20 text-blue-300 text-xs rounded-full border border-blue-500/30">
                       {raceIcons[character.race]}{' '}
                       <Translation id={`games.dnd.races.${character.race}`} />
@@ -142,7 +147,7 @@ const CharactersList = () => {
                     {Object.entries(character.stats).map(([stat, value]) => (
                       <div
                         key={stat}
-                        className="text-center p-2 bg-white/5 rounded"
+                        className={`text-center p-2 bg-white/5 rounded border-2 ${statBorderColors[stat as keyof typeof statBorderColors]}`}
                       >
                         <div className="text-gray-400 text-xs uppercase">
                           <Translation id={`games.dnd.stats.${stat}`} />

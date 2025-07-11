@@ -49,6 +49,16 @@ export const backgroundIcons = {
   [EBackground.Sailor]: '⚓',
 };
 
+// Stat border colors
+export const statBorderColors = {
+  strength: 'border-red-500/50',
+  dexterity: 'border-yellow-500/50',
+  constitution: 'border-orange-500/50',
+  intelligence: 'border-blue-500/50',
+  wisdom: 'border-purple-500/50',
+  charisma: 'border-green-500/50',
+};
+
 // Helper function to get background skills for a character
 export const getBackgroundSkills = (background: EBackground): ESkills[] => {
   return DnD.backgroundSkills[background] || [];

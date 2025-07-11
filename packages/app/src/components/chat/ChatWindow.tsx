@@ -2,8 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { marked } from 'marked';
-
 import { ChatMessage, ChatMessageData, QueryInputArea } from '@/components';
 import { useWebSocketClient } from '@/contexts/WebSocketContext';
 import { WebSocketChatTypes } from '@/utils/WebSocketClient';
@@ -38,8 +36,7 @@ export const ChatWindow = ({
     setMessages(prev => [...prev, message]);
   };
   const formatMessage = async (message: string) => {
-    return await marked(message);
-    //message.replace(/\r\n/g, '\n').replace(/\n/g, '<br>');
+    return message.replace(/\r\n/g, '\n').replace(/\n/g, '<br>');
   };
 
   // scroll to bottom

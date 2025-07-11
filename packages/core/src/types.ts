@@ -30,17 +30,6 @@ export interface ISkills {
   survival: number;
 }
 
-export interface ISchema_World {
-  id: string;
-  name: string;
-  image?: string;
-  level: number;
-  description: string;
-  story: string;
-  createdAt: number;
-  updatedAt: number;
-}
-
 export interface ISchema_Character {
   id: string;
   name: string;
@@ -67,6 +56,43 @@ export interface ISchema_Item {
   updatedAt: number;
 }
 
+export interface ISchema_Campaign {
+  id: string;
+  name: string;
+  worldId: string;
+  players: string[];
+  storyId?: string;
+  state?: {
+    storySummary?: string;
+    notes?: string;
+    chatMemory?: string[];
+  };
+  completedStories: string[];
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface ISchema_World {
+  id: string;
+  name: string;
+  image?: string;
+  level: number;
+  description: string;
+  story: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface ISchema_Story {
+  id: string;
+  worldId: string;
+  name: string;
+  level: number;
+  description: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
 export interface ISchema_Location {
   id: string;
   worldId: string;
@@ -84,6 +110,18 @@ export interface ISchema_NPC {
   image?: string;
   description: string;
   voice: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface ISchema_Voice {
+  id: string;
+  name: string;
+  description: string;
+  engine: string;
+  voiceId: string;
+  modelId: string;
+  vibe?: string;
   createdAt: number;
   updatedAt: number;
 }

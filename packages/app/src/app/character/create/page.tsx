@@ -2,7 +2,12 @@
 
 import { useApi } from '@/contexts/ApiContext';
 import { Translation } from '@/labels/Translation';
-import { backgroundIcons, classIcons, raceIcons } from '@/utils/game';
+import {
+  backgroundIcons,
+  classIcons,
+  raceIcons,
+  statBorderColors,
+} from '@/utils/game';
 import {
   DnD,
   EBackground,
@@ -204,7 +209,10 @@ const AbilityScoresStep = ({
 
       <div className="grid md:grid-cols-2 gap-6">
         {Object.entries(form.stats).map(([stat, value]) => (
-          <div key={stat} className="bg-white/5 rounded-lg p-4">
+          <div
+            key={stat}
+            className={`bg-white/5 rounded-lg p-4 border-2 ${statBorderColors[stat as keyof typeof statBorderColors]}`}
+          >
             <div className="flex justify-between items-center mb-2">
               <label className="text-white font-medium capitalize">
                 <Translation id={`games.dnd.stats.${stat}`} />

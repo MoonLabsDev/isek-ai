@@ -2,7 +2,11 @@ import fs from 'fs';
 
 import { Socket } from 'socket.io';
 
-import { TTS_Gradio_XTTS } from '@moonlabs/nodejs-tools-ai';
+import {
+  TTS_OpenAI,
+  TTS_OpenAI_Model,
+  TTS_OpenAI_Voice,
+} from '@moonlabs/nodejs-tools-ai';
 
 import {
   websocket_emitJobEnd,
@@ -22,15 +26,20 @@ export const job_tts = async (socket: Socket, { text }: TTSPayload) => {
   let filePath: string | null = null;
   try {
     // tts
-    const tts = new TTS_Gradio_XTTS();
+    const tts = new TTS_OpenAI('output/tts/');
 
     // model name
-    const voiceName = 'default';
-    const modelName = tts.ttsModel;
+    const voiceName = TTS_OpenAI_Voice.ASH;
+    const modelName = TTS_OpenAI_Model.TTS_1;
     websocket_emitStatus(socket, `🤖 Using ${modelName}: ${voiceName}`);
 
     // generate
-    filePath = await tts.generate({ text, language: 'en' });
+    filePath = await tts.generate({
+      text,
+      voiceId: voiceName,
+      modelId: modelName,
+      vibe: 'Speak like a dungeons and dragons storyteller',
+    });
 
     // status
     websocket_emitJobEnd(socket);
